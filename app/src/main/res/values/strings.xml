@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MovieAppMaster</string>
+    <string name="Action_Setting">Setting</string>
+    <string name="popular">Most Popular</string>
+    <string name="refresh">Refresh</string>
+    <string name="rate">Most Rated</string>
+    <string name="ConError">Can not connect to internet , Check your internet connection</string>
+</resources>
