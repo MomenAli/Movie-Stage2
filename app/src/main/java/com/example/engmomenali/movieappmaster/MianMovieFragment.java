@@ -102,7 +102,27 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
         int id = item.getItemId();
         if(id == R.id.Refresh){
             Log.d(TAG, "onOptionsItemSelected: Refresh ///////////////////////////////////");
+            mLoadingData = new AsyncTask() {
+                @Override
+                protected Object doInBackground(Object[] objects) {
+                    Log.d(TAG, "doInBackground: i enter thread   ---------------");
+                    MovieSyncUtils.startImmediateSync(getActivity());
+                    return true;
+                }
 
+                @Override
+                protected void onPostExecute(Object o) {
+                    Cursor c =
+                            getActivity().getContentResolver().query(MovieEntry.CONTENT_URI,
+                                    new String[]{MovieEntry._ID},
+                                    null,
+                                    null,
+                                    null);
+                    mMovieAdabter.swapCursor(c);
+                    Log.d(TAG, "onPostExecute: done quary ******************");
+                    super.onPostExecute(o);
+                }
+            };
 
             return true;
         }
