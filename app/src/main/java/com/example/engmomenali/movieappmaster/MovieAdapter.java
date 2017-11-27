@@ -78,7 +78,7 @@ public class MovieAdapter extends CursorAdapter {
         Log.d(LOG_TAG, "bindView: "+posterPath);
 
         Picasso.with(mContext)
-            .load(/*URLParameters.POSTER_URL+URLParameters.PHONE_SIZE+*/posterPath)
+            .load(URLParameters.POSTER_URL+URLParameters.PHONE_SIZE+posterPath)
             .placeholder(R.drawable.placeholder)
                     .error(R.drawable.error)
                     .into(viewHolder.imageView);

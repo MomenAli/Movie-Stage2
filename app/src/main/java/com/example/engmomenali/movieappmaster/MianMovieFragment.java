@@ -102,27 +102,25 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
         int id = item.getItemId();
         if(id == R.id.Refresh){
             Log.d(TAG, "onOptionsItemSelected: Refresh ///////////////////////////////////");
-            mLoadingData = new AsyncTask() {
-                @Override
-                protected Object doInBackground(Object[] objects) {
-                    Log.d(TAG, "doInBackground: i enter thread   ---------------");
-                    MovieSyncUtils.startImmediateSync(getActivity());
-                    return true;
-                }
 
-                @Override
-                protected void onPostExecute(Object o) {
+                    MovieSyncUtils.startImmediateSync(getActivity());
+
                     Cursor c =
                             getActivity().getContentResolver().query(MovieEntry.CONTENT_URI,
-                                    new String[]{MovieEntry._ID},
+                                    null,
                                     null,
                                     null,
                                     null);
                     mMovieAdabter.swapCursor(c);
-                    Log.d(TAG, "onPostExecute: done quary ******************");
-                    super.onPostExecute(o);
-                }
-            };
+
+//            LoaderManager loadermanger = getSupportLoaderManager();
+//            Loader<String> githubloader = loadermanger.getLoader(GITHUB_SEARCH_LOADER);
+//
+//            if(githubloader == null){
+//                loadermanger.initLoader(GITHUB_SEARCH_LOADER,queryBundle,this);
+//            }else{
+//                loadermanger.restartLoader(GITHUB_SEARCH_LOADER,queryBundle,this);
+//            }
 
             return true;
         }
@@ -169,29 +167,32 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
 //        }
         gridView = (GridView) rootView.findViewById(R.id.gridview);
         gridView.setAdapter(mMovieAdabter);
-//        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-////                Movie MovieClick = mMovieAdabter.getItem(i);
-////
-////                // i did search in stackoverflow for passing multiple string to another activity and i found bundle
-////                Intent intent = new Intent(getActivity() , MovieDetailsActivity.class);
-////
-////                Bundle extras = new Bundle();
-////
-////                Log.d(TAG, "onItemClick: "+MovieClick.getoverview());
-////                extras.putString("Title",MovieClick.getTitle());
-////                extras.putString("PosterPath",MovieClick.getPosterPath());
-////                extras.putString("overview",MovieClick.getoverview());
-////                extras.putString("Ratings",String.valueOf(MovieClick.getRatings()));
-////                extras.putString("ReleaseDate",MovieClick.getReleaseDate());
-////
-////                intent.putExtras(extras);
-////                startActivity(intent);
-////
-////                mMovieAdabter.notifyDataSetChanged();
-//            }
-//        });
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Cursor mCursor = mMovieAdabter.getCursor();
+                mCursor.moveToPosition(i);
+
+                // i did search in stackoverflow for passing multiple string to another activity and i found bundle
+                Intent intent = new Intent(getActivity() , MovieDetailsActivity.class);
+
+                Bundle extras = new Bundle();
+                Log.d(TAG, "onItemClick: "+mCursor.getString(mCursor.getColumnIndex(MovieEntry.TITLE)));
+                extras.putString(MovieEntry._ID,mCursor.getString(mCursor.getColumnIndex(MovieEntry._ID)));
+                extras.putString(MovieEntry.TITLE,mCursor.getString(mCursor.getColumnIndex(MovieEntry.TITLE)));
+                extras.putString(MovieEntry.POSTERPATH,mCursor.getString(mCursor.getColumnIndex(MovieEntry.POSTERPATH)));
+                extras.putString(MovieEntry.OVERVIEW,mCursor.getString(mCursor.getColumnIndex(MovieEntry.OVERVIEW)));
+                extras.putString(MovieEntry.RATING,mCursor.getString(mCursor.getColumnIndex(MovieEntry.RATING)));
+                extras.putString(MovieEntry.POPULARITY,mCursor.getString(mCursor.getColumnIndex(MovieEntry.POPULARITY)));
+                extras.putString(MovieEntry.COVERIMAGEPATH,mCursor.getString(mCursor.getColumnIndex(MovieEntry.COVERIMAGEPATH)));
+                extras.putString(MovieEntry.RELEASEDATE,mCursor.getString(mCursor.getColumnIndex(MovieEntry.RELEASEDATE)));
+
+                intent.putExtras(extras);
+                startActivity(intent);
+
+                mMovieAdabter.notifyDataSetChanged();
+           }
+        });
 
         return rootView;
     }

@@ -48,7 +48,8 @@ public class  MovieJsonUtils {
         final String OWM_overview     = "overview";
         final String OWM_vote_average = "vote_average";
         final String OWM_release_date = "release_date";
-        final String OWM_Popularity ="popularity";
+        final String OWM_Popularity   = "popularity";
+        final String OWM_CoverPoster  ="backdrop_path";
         Log.d("TAG", "getMovies: jsonstr ====== > "+JsonStr);
         JSONObject MoviesJson = new JSONObject(JsonStr);
 
@@ -80,12 +81,13 @@ public class  MovieJsonUtils {
             JSONObject MovieJSONItem = MovieJsonArray.getJSONObject(i);
 
             cv[i].put(MovieContract.MovieEntry._ID, MovieJSONItem.getLong(OWM_id));
-            cv[i].put(MovieContract.MovieEntry.TITLE, MovieJSONItem.getLong(OWM_Title));
-            cv[i].put(MovieContract.MovieEntry.POSTERPATH, MovieJSONItem.getLong(OWM_poster_path));
-            cv[i].put(MovieContract.MovieEntry.RATING, MovieJSONItem.getLong(OWM_vote_average));
-            cv[i].put(MovieContract.MovieEntry.RELEASEDATE, MovieJSONItem.getLong(OWM_release_date));
-            cv[i].put(MovieContract.MovieEntry.OVERVIEW, MovieJSONItem.getLong(OWM_overview));
-            cv[i].put(MovieContract.MovieEntry.POPULARITY, MovieJSONItem.getLong(OWM_Popularity));
+            cv[i].put(MovieContract.MovieEntry.TITLE, MovieJSONItem.getString(OWM_Title));
+            cv[i].put(MovieContract.MovieEntry.POSTERPATH, MovieJSONItem.getString(OWM_poster_path));
+            cv[i].put(MovieContract.MovieEntry.RATING, MovieJSONItem.getDouble(OWM_vote_average));
+            cv[i].put(MovieContract.MovieEntry.RELEASEDATE, MovieJSONItem.getString(OWM_release_date));
+            cv[i].put(MovieContract.MovieEntry.OVERVIEW, MovieJSONItem.getString(OWM_overview));
+            cv[i].put(MovieContract.MovieEntry.POPULARITY, MovieJSONItem.getDouble(OWM_Popularity));
+            cv[i].put(MovieContract.MovieEntry.COVERIMAGEPATH, MovieJSONItem.getString(OWM_CoverPoster));
 
 
         }
