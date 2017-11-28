@@ -7,8 +7,9 @@
     <string name="release">RELEASE DATE</string>
     <string name="vote_average">7.3</string>
     <string name="contentDescription">Movie Image</string>
+    <string name="trailerName">Trailer Number</string>
     <string name="release_date">2017-09-05</string>
     <string name="overview">In a small town in Maine, seven children known as The Losers Club come face to face with life problems.</string>
-
+    <string name="resolution">720</string>
     <string name="ConError">Can not connect to internet , Check your internet connection</string>
 </resources>
