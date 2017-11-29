@@ -93,7 +93,6 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
 
     public void insertdata(){
         Log.d(TAG, "insertdata: inserting this fucking data");
-
         MovieSyncUtils.startImmediateSync(getActivity());
     }
 
