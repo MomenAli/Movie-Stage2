@@ -10,5 +10,8 @@ public class URLParameters {
     public static final String POSTER_URL = "http://image.tmdb.org/t/p";
     public static final String PHONE_SIZE = "/w185/";
     public static final String BASIC_YOUTUBE_URL = "https://www.youtube.com/watch?v=";
+    public static final String Fetch_trailers = "/videos";
+    public static final String Fetch_reviews = "/reviews";
+
 
 }

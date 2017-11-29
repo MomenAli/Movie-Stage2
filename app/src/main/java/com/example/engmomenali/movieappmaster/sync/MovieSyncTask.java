@@ -9,6 +9,8 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.URL;
+
+import com.example.engmomenali.movieappmaster.MianMovieFragment;
 import com.example.engmomenali.movieappmaster.NetworkUtils;
 import com.example.engmomenali.movieappmaster.MovieJsonUtils;
 import com.example.engmomenali.movieappmaster.Data.MovieContract.*;
@@ -21,7 +23,7 @@ import com.example.engmomenali.movieappmaster.Movie;
 public class MovieSyncTask {
     synchronized public static void syncMovie(Context context) {
         Log.d("TAG", "syncMovie: i did quary *************************************");
-        URL url = NetworkUtils.buildUrl(2);
+        URL url = NetworkUtils.buildUrl(MianMovieFragment.Search_Sort);
 
         try {
             String jsonResult = NetworkUtils.getResponseFromHttpUrl(url);

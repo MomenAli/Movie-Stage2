@@ -36,7 +36,7 @@ import com.example.engmomenali.movieappmaster.sync.MovieSyncUtils;
 
 public class MianMovieFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
     private static final String TAG = MianMovieFragment.class.getSimpleName();
-
+    public static int Search_Sort = 2;
     private  MovieAdapter mMovieAdabter;
     AsyncTask mLoadingData;
     String JSONResults;
@@ -125,19 +125,30 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
             return true;
         }
         if(id == R.id.Most_pop){
-            try {
-                fetchMovies(1);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+
+                Search_Sort = 1;
+                MovieSyncUtils.startImmediateSync(getActivity());
+
+                Cursor c =
+                        getActivity().getContentResolver().query(MovieEntry.CONTENT_URI,
+                                null,
+                                null,
+                                null,
+                                null);
+                mMovieAdabter.swapCursor(c);
             return true;
         }
         if(id == R.id.Most_rate){
-            try {
-                fetchMovies(0);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            Search_Sort = 1;
+            MovieSyncUtils.startImmediateSync(getActivity());
+
+            Cursor c =
+                    getActivity().getContentResolver().query(MovieEntry.CONTENT_URI,
+                            null,
+                            null,
+                            null,
+                            null);
+            mMovieAdabter.swapCursor(c);
             return true;
         }
         return super.onOptionsItemSelected(item);

@@ -3,10 +3,13 @@ package com.example.engmomenali.movieappmaster;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,6 +18,7 @@ import com.squareup.picasso.Picasso;
 
 public class MovieDetailsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
+    public static String TagId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +29,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
         TextView  TVUserRating = (TextView) findViewById(R.id.UserRating);
         TextView  TVReleaseDate = (TextView) findViewById(R.id.ReleaseDate);
 
-
             Bundle extras = getIntent().getExtras();
 
 
@@ -33,12 +36,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
             TVOverView.setText(extras.getString(MovieContract.MovieEntry.OVERVIEW));
             TVUserRating.setText(extras.getString(MovieContract.MovieEntry.RATING));
             TVReleaseDate.setText( extras.getString(MovieContract.MovieEntry.RELEASEDATE));
-
+            TagId = extras.getString(MovieContract.MovieEntry._ID);
             Picasso.with(this)
                     .load(URLParameters.POSTER_URL+URLParameters.PHONE_SIZE+extras.getString(MovieContract.MovieEntry.POSTERPATH))
                     .placeholder(R.drawable.placeholder)
                     .error(R.drawable.error)
                     .into(IM);
+
 
     }
 

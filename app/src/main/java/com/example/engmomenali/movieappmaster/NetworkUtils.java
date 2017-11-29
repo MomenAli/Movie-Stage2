@@ -1,6 +1,7 @@
 package com.example.engmomenali.movieappmaster;
 
 import android.net.Uri;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,6 +52,14 @@ public class NetworkUtils {
         }
 
         return url;
+    }
+    public static String buildUrl(String BaseUrl) {
+
+        Uri builtUri = Uri.parse(BaseUrl).buildUpon()
+                .appendQueryParameter(api_key, key)
+                .build();
+        Log.d("buildUrl", "buildUrl: "+builtUri.toString());
+        return builtUri.toString();
     }
     // the same function in lesson 2
 

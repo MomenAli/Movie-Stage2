@@ -1,12 +1,11 @@
 package com.example.engmomenali.movieappmaster;
 
-import android.support.v4.app.LoaderManager;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.text.TextUtils;
@@ -24,56 +23,39 @@ import java.net.URL;
 import java.util.Arrays;
 
 /**
- * Created by Momen Ali on 11/27/2017.
+ * Created by Momen Ali on 11/28/2017.
  */
 
-public class TrailerFragment extends Fragment implements LoaderManager.LoaderCallbacks<String>{
+public class ReviewFragment  extends Fragment implements LoaderManager.LoaderCallbacks<String>{
 
     ListView listView;
     private static final String SEARCH_QUERY_URL_EXTRA = "query";
-    private static final int SEARCH_LOADER = 552;
+    private static final int SEARCH_LOADER = 553;
     int Quary_Kind;
     private static final int Quary_fetch_trialers = 437;
     private static final int Quary_fetch_reviews = 800;
-    private TrailerAdapter mTrailerAdapter;
-    Trailer[] trailers = new Trailer[]{new Trailer()};
+    private ReviewAdabter mReviewAdabter;
+    Review[] reviews = new Review[]{new Review()};
 
 
-    public TrailerFragment() {
+    public ReviewFragment() {
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        fetchTrailers();
+        fetchReviews();
         super.onActivityCreated(savedInstanceState);
     }
-    public void fetchTrailers(){
-        Quary_Kind = Quary_fetch_trialers;
 
-        String SearchUrl =
-                NetworkUtils.buildUrl(URLParameters.MOVIE_DB_SITE_URL +"/"+ MovieDetailsActivity.TagId + URLParameters.Fetch_trailers);
-      Bundle queryBundle = new Bundle();
-         queryBundle.putString(SEARCH_QUERY_URL_EXTRA, SearchUrl);
-
-        LoaderManager loaderManager = this.getLoaderManager();
-        Loader<String> SearchLoader = loaderManager.getLoader(SEARCH_LOADER);
-         if (SearchLoader == null) {
-            loaderManager.initLoader(SEARCH_LOADER, queryBundle, this);
-        } else {
-            loaderManager.restartLoader(SEARCH_LOADER, queryBundle, this);
-        }
-    }
     public void fetchReviews(){
         Quary_Kind = Quary_fetch_reviews;
 
-        String id = getTag();
-        Log.d("SearchResults", "fetchReviews: "+id);
 
         String SearchUrl =
-                NetworkUtils.buildUrl(URLParameters.MOVIE_DB_SITE_URL +"/"+ id + URLParameters.Fetch_reviews);
+                NetworkUtils.buildUrl(URLParameters.MOVIE_DB_SITE_URL +"/"+ MovieDetailsActivity.TagId + URLParameters.Fetch_reviews);
         Bundle queryBundle = new Bundle();
         queryBundle.putString(SEARCH_QUERY_URL_EXTRA, SearchUrl);
-
+        Log.d("SearchResults", "fetchReviews: "+SearchUrl);
         LoaderManager loaderManager = this.getLoaderManager();
         Loader<String> SearchLoader = loaderManager.getLoader(SEARCH_LOADER);
         if (SearchLoader == null) {
@@ -87,17 +69,18 @@ public class TrailerFragment extends Fragment implements LoaderManager.LoaderCal
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fregment_trailer, container, false);
 
-        mTrailerAdapter = new TrailerAdapter(getActivity(), Arrays.asList(trailers));
+        mReviewAdabter = new ReviewAdabter(getActivity(), Arrays.asList(reviews));
 
         // Get a reference to the ListView, and attach this adapter to it.
         listView = (ListView) rootView.findViewById(R.id.listview);
-        listView.setAdapter(mTrailerAdapter);
+        listView.setAdapter(mReviewAdabter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Trailer trailer = mTrailerAdapter.getItem(position);
-                Uri uri = Uri.parse(URLParameters.BASIC_YOUTUBE_URL+trailer.getKey());
+                Review review = mReviewAdabter.getItem(position);
+                Uri uri = Uri.parse(review.getUrl());
+                Log.d("SearchResults", "onItemClick: "+review.getUrl());
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(uri);
 
@@ -132,7 +115,7 @@ public class TrailerFragment extends Fragment implements LoaderManager.LoaderCal
                 try {
                     URL Url= new URL(Quary_Url);
                     String SearchResults = NetworkUtils.getResponseFromHttpUrl(Url);
-                    Log.d("SearchResults", "loadInBackground: "+SearchResults);
+                    Log.d("SearchResults", "loadInBackground11: "+SearchResults);
                     return SearchResults;
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -157,16 +140,16 @@ public class TrailerFragment extends Fragment implements LoaderManager.LoaderCal
         if (data != null) {
             try {
                 Log.d("SearchResults", "onLoadFinished: "+data);
-                trailers = MovieJsonUtils.getTrailers(getContext(), data);
+                reviews = MovieJsonUtils.getReviews(getContext(), data);
 
-                Log.d("SearchResults", "number of movies: "+trailers.length);
-                for (Trailer t:trailers
-                     ) {
+                Log.d("SearchResults", "number of reviews: "+reviews.length);
+                for (Review t:reviews
+                        ) {
                     Log.d("SearchResults", "onLoadFinished: "+t.toString());
                 }
-                mTrailerAdapter = new TrailerAdapter(getActivity(), Arrays.asList(trailers));
-                listView.setAdapter(mTrailerAdapter);
-                mTrailerAdapter.notifyDataSetChanged();
+                mReviewAdabter = new ReviewAdabter(getActivity(), Arrays.asList(reviews));
+                listView.setAdapter(mReviewAdabter);
+                mReviewAdabter.notifyDataSetChanged();
             } catch (JSONException e) {
                 e.printStackTrace();
             }

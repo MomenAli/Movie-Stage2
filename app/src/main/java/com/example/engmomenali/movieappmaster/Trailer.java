@@ -22,10 +22,21 @@ public class Trailer {
 
     public static final int Id_Tag = 50;
     String id;
-
-
     String key;
     String size;
+
+
+    public Trailer() {
+    }
+
+    @Override
+    public String toString() {
+        return "Trailer{" +
+                "id='" + id + '\'' +
+                ", key='" + key + '\'' +
+                ", size='" + size + '\'' +
+                '}';
+    }
 
     public String getKey() {
         return key;
