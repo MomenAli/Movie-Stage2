@@ -22,6 +22,6 @@ public class MovieSyncIntentServise extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         Context context = MovieSyncIntentServise.this;
-        MovieSyncTask.syncMovie(context);
+        MovieSyncTask.InsertMovies(context);
     }
 }

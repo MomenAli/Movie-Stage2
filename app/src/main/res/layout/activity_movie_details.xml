@@ -154,6 +154,19 @@
             app:layout_constraintTop_toBottomOf="@+id/imageView3"
             android:layout_marginLeft="16dp" />
 
+        <ImageView
+            android:id="@+id/favorite_star"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/DetailsIV"
+            app:layout_constraintTop_toBottomOf="@+id/UserRating"
+            app:srcCompat="@android:drawable/btn_star_big_off"
+            android:onClick="MakeAsFavorite"/>
+
 
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

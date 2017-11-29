@@ -10,7 +10,7 @@ import com.example.engmomenali.movieappmaster.Data.MovieContract.*;
  */
 
 public class MovieDBHelper extends SQLiteOpenHelper {
-    private static final int DB_VERSION = 4;
+    private static final int DB_VERSION = 6;
     private static final String DB_NAME = "movieapp.db";
 
     public MovieDBHelper(Context context) {
@@ -26,7 +26,9 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 MovieEntry.RATING + " REAL NOT NULL ," +
                 MovieEntry.OVERVIEW + " TEXT NOT NULL,"+
                 MovieEntry.COVERIMAGEPATH + " TEXT NOT NULL,"+
-                MovieEntry.POSTERPATH + " TEXT NOT NULL);";
+                MovieEntry.POSTERPATH + " TEXT NOT NULL," +
+                MovieEntry.Favorit + " INTEGER DEFAULT 0 "+
+                ");";
         db.execSQL(Query_Create_Table);
     }
 

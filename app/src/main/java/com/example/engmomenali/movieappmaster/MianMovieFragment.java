@@ -1,6 +1,7 @@
 package com.example.engmomenali.movieappmaster;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
@@ -27,6 +28,8 @@ import org.json.JSONException;
 
 import java.net.URL;
 import java.util.ArrayList;
+
+import com.example.engmomenali.movieappmaster.Data.MovieContract;
 import com.example.engmomenali.movieappmaster.Data.MovieContract.*;
 import com.example.engmomenali.movieappmaster.sync.MovieSyncUtils;
 
@@ -37,6 +40,7 @@ import com.example.engmomenali.movieappmaster.sync.MovieSyncUtils;
 public class MianMovieFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
     private static final String TAG = MianMovieFragment.class.getSimpleName();
     public static int Search_Sort = 2;
+
     private  MovieAdapter mMovieAdabter;
     AsyncTask mLoadingData;
     String JSONResults;
@@ -95,6 +99,51 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
         Log.d(TAG, "insertdata: inserting this fucking data");
         MovieSyncUtils.startImmediateSync(getActivity());
     }
+String TAG_life = "lifecycle";
+    @Override
+    public void onStart() {
+        Log.d(TAG_life, "onStart: ");
+
+        Cursor c =
+                this.getActivity().getContentResolver().query(MovieEntry.CONTENT_URI,
+                        null,
+                        null,
+                        null,
+                        null);
+        mMovieAdabter.swapCursor(c);
+        PrintCursor(c);
+        super.onStart();
+    }
+    public void PrintCursor(Cursor mCursor){
+        if (mCursor.getCount()==0)return;
+        for(int i = 0 ; i < mCursor.getCount();i++) {
+            mCursor.moveToPosition(0);
+            String ss = MovieContract.MovieEntry._ID + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry._ID)) + " " +
+                    MovieContract.MovieEntry.TITLE + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.TITLE)) + " " +
+                    MovieContract.MovieEntry.POSTERPATH + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.POSTERPATH)) + " " +
+                    MovieContract.MovieEntry.OVERVIEW + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.OVERVIEW)) + " " +
+                    MovieContract.MovieEntry.RATING + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.RATING)) + " " +
+                    MovieContract.MovieEntry.POPULARITY + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.POPULARITY)) + " " +
+                    MovieContract.MovieEntry.COVERIMAGEPATH + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.COVERIMAGEPATH)) + " " +
+                    MovieContract.MovieEntry.RELEASEDATE + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.RELEASEDATE)) + " " +
+                    MovieContract.MovieEntry.Favorit + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.Favorit));
+            Log.d(TAG_life, "Movie: "+ss);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        Log.d(TAG_life, "onResume: ");
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        Log.d(TAG_life, "onPause: ");
+        super.onPause();
+    }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -188,6 +237,7 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
 
                 Bundle extras = new Bundle();
                 Log.d(TAG, "onItemClick: "+mCursor.getString(mCursor.getColumnIndex(MovieEntry.TITLE)));
+
                 extras.putString(MovieEntry._ID,mCursor.getString(mCursor.getColumnIndex(MovieEntry._ID)));
                 extras.putString(MovieEntry.TITLE,mCursor.getString(mCursor.getColumnIndex(MovieEntry.TITLE)));
                 extras.putString(MovieEntry.POSTERPATH,mCursor.getString(mCursor.getColumnIndex(MovieEntry.POSTERPATH)));
@@ -196,7 +246,8 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
                 extras.putString(MovieEntry.POPULARITY,mCursor.getString(mCursor.getColumnIndex(MovieEntry.POPULARITY)));
                 extras.putString(MovieEntry.COVERIMAGEPATH,mCursor.getString(mCursor.getColumnIndex(MovieEntry.COVERIMAGEPATH)));
                 extras.putString(MovieEntry.RELEASEDATE,mCursor.getString(mCursor.getColumnIndex(MovieEntry.RELEASEDATE)));
-
+                extras.putString(MovieEntry.Favorit,mCursor.getString(mCursor.getColumnIndex(MovieEntry.Favorit)));
+                Log.d("MovieDetailsActivity", "onItemClick: favorite "+mCursor.getString(mCursor.getColumnIndex(MovieEntry.Favorit)));
                 intent.putExtras(extras);
                 startActivity(intent);
 
