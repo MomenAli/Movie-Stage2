@@ -13,7 +13,6 @@ public class MovieSyncIntentServise extends IntentService {
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      *
-     * @param name Used to name the worker thread, important only for debugging.
      */
     public MovieSyncIntentServise() {
         super("MovieSyncIntentServise");
@@ -22,6 +21,6 @@ public class MovieSyncIntentServise extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         Context context = MovieSyncIntentServise.this;
-        MovieSyncTask.InsertMovies(context);
+        MovieSyncTask.syncMovie(context);
     }
 }

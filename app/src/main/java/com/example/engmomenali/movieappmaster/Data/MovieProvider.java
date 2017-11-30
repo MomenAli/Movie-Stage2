@@ -158,6 +158,7 @@ public class MovieProvider extends ContentProvider {
                 if (count>0){
                     getContext().getContentResolver().notifyChange(uri,null);
                 }
+                Log.d("lifecycle", "bulkInsert: "+ count);
                 return count;
                 default:
                     return super.bulkInsert(uri, values);

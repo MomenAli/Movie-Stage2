@@ -66,6 +66,7 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        Log.d(TAG_life, "onActivityCreated: ");
 
         Log.d(TAG, "onActivityCreated: /////////////////////////////");
         Cursor c =
@@ -117,7 +118,7 @@ String TAG_life = "lifecycle";
     public void PrintCursor(Cursor mCursor){
         if (mCursor.getCount()==0)return;
         for(int i = 0 ; i < mCursor.getCount();i++) {
-            mCursor.moveToPosition(0);
+            mCursor.moveToPosition(i);
             String ss = MovieContract.MovieEntry._ID + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry._ID)) + " " +
                     MovieContract.MovieEntry.TITLE + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.TITLE)) + " " +
                     MovieContract.MovieEntry.POSTERPATH + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.POSTERPATH)) + " " +
@@ -148,54 +149,31 @@ String TAG_life = "lifecycle";
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.Refresh){
-            Log.d(TAG, "onOptionsItemSelected: Refresh ///////////////////////////////////");
 
-                    MovieSyncUtils.startImmediateSync(getActivity());
-
-                    Cursor c =
-                            getActivity().getContentResolver().query(MovieEntry.CONTENT_URI,
-                                    null,
-                                    null,
-                                    null,
-                                    null);
-                    mMovieAdabter.swapCursor(c);
-
-//            LoaderManager loadermanger = getSupportLoaderManager();
-//            Loader<String> githubloader = loadermanger.getLoader(GITHUB_SEARCH_LOADER);
-//
-//            if(githubloader == null){
-//                loadermanger.initLoader(GITHUB_SEARCH_LOADER,queryBundle,this);
-//            }else{
-//                loadermanger.restartLoader(GITHUB_SEARCH_LOADER,queryBundle,this);
-//            }
-
-            return true;
-        }
         if(id == R.id.Most_pop){
 
                 Search_Sort = 1;
                 MovieSyncUtils.startImmediateSync(getActivity());
-
+                String mSortOrder = MovieEntry.POPULARITY + " ASC";
                 Cursor c =
                         getActivity().getContentResolver().query(MovieEntry.CONTENT_URI,
                                 null,
                                 null,
                                 null,
-                                null);
+                                mSortOrder);
                 mMovieAdabter.swapCursor(c);
             return true;
         }
         if(id == R.id.Most_rate){
             Search_Sort = 1;
             MovieSyncUtils.startImmediateSync(getActivity());
-
+            String mSortOrder = MovieEntry.RATING + " ASC";
             Cursor c =
                     getActivity().getContentResolver().query(MovieEntry.CONTENT_URI,
                             null,
                             null,
                             null,
-                            null);
+                            mSortOrder);
             mMovieAdabter.swapCursor(c);
             return true;
         }
