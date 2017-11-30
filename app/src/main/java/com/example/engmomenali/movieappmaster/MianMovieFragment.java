@@ -1,7 +1,5 @@
 package com.example.engmomenali.movieappmaster;
 
-import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
@@ -31,6 +29,7 @@ import java.util.ArrayList;
 
 import com.example.engmomenali.movieappmaster.Data.MovieContract;
 import com.example.engmomenali.movieappmaster.Data.MovieContract.*;
+import com.example.engmomenali.movieappmaster.Utils.NetworkUtils;
 import com.example.engmomenali.movieappmaster.sync.MovieSyncUtils;
 
 /**
@@ -154,7 +153,7 @@ String TAG_life = "lifecycle";
 
                 Search_Sort = 1;
                 MovieSyncUtils.startImmediateSync(getActivity());
-                String mSortOrder = MovieEntry.POPULARITY + " ASC";
+                String mSortOrder = MovieEntry.POPULARITY + " DESC";
                 Cursor c =
                         getActivity().getContentResolver().query(MovieEntry.CONTENT_URI,
                                 null,
@@ -167,7 +166,7 @@ String TAG_life = "lifecycle";
         if(id == R.id.Most_rate){
             Search_Sort = 1;
             MovieSyncUtils.startImmediateSync(getActivity());
-            String mSortOrder = MovieEntry.RATING + " ASC";
+            String mSortOrder = MovieEntry.RATING + " DESC";
             Cursor c =
                     getActivity().getContentResolver().query(MovieEntry.CONTENT_URI,
                             null,

@@ -1,23 +1,28 @@
 package com.example.engmomenali.movieappmaster;
 
 import android.content.ContentValues;
-import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.engmomenali.movieappmaster.Data.MovieContract;
+import com.example.engmomenali.movieappmaster.Utils.URLParameters;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MovieDetailsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
@@ -37,7 +42,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
 
             Bundle extras = getIntent().getExtras();
 
-
+        ViewPager viewPager = (ViewPager) findViewById(R.id.trailer_viewpager);
+        if (viewPager != null) {
+            Adapter adapter = new Adapter(getSupportFragmentManager());
+            adapter.addFragment(new TrailerFragment(), "Category 1");
+            viewPager.setAdapter(adapter);
+        }
             setTitle(extras.getString(MovieContract.MovieEntry.TITLE));
             TVOverView.setText(extras.getString(MovieContract.MovieEntry.OVERVIEW));
             TVUserRating.setText(extras.getString(MovieContract.MovieEntry.RATING));
@@ -61,6 +71,23 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
 
     }
 
+    @Override
+    protected void onResume() {
+
+        ImageView favoriteStar = (ImageView) findViewById(R.id.favorite_star);
+        Cursor mCursor = getContentResolver().query(MovieContract.MovieEntry.buildMovieUri(Long.parseLong(TagId)), null, null, null, null);
+        if (mCursor.getCount() >0) {
+            mCursor.moveToPosition(0);
+            if (mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.Favorit)).equals("0")) {
+                Favorate = false;
+                favoriteStar.setImageResource(android.R.drawable.btn_star_big_off);
+            } else {
+                Favorate = true;
+                favoriteStar.setImageResource(android.R.drawable.btn_star_big_on);
+            }
+        }
+        super.onResume();
+    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -92,8 +119,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
             contentValues.put(MovieContract.MovieEntry.Favorit,"0");
             getContentResolver().update(MovieContract.MovieEntry.buildMovieUri(Long.parseLong(TagId)),contentValues,null,null);
             Log.d(TAG, "MakeAsFavorite: "+ MovieContract.MovieEntry.buildMovieUri(Long.parseLong(TagId)));
-            Cursor mCursor = getContentResolver().query(MovieContract.MovieEntry.buildMovieUri(Long.parseLong(TagId)),null,null,null,null);
-            Log.d(TAG, "MakeAsFavorite: "+PrintCursor(mCursor));
+
 
         }else {
             IM.setImageResource(android.R.drawable.btn_star_big_on);
@@ -120,5 +146,33 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
         MovieContract.MovieEntry.RELEASEDATE +" "+mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.RELEASEDATE)) +" "+
         MovieContract.MovieEntry.Favorit +" "+mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.Favorit));
         return ss;
+    }
+    static class Adapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragments = new ArrayList<>();
+        private final List<String> mFragmentTitles = new ArrayList<>();
+
+        public Adapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragments.add(fragment);
+            mFragmentTitles.add(title);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragments.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragments.size();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitles.get(position);
+        }
     }
 }

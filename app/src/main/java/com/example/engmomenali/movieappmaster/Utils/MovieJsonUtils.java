@@ -1,10 +1,12 @@
-package com.example.engmomenali.movieappmaster;
+package com.example.engmomenali.movieappmaster.Utils;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.util.Log;
 
 import com.example.engmomenali.movieappmaster.Data.MovieContract;
+import com.example.engmomenali.movieappmaster.Review;
+import com.example.engmomenali.movieappmaster.Trailer;
 
 import org.json.JSONArray;
 import org.json.JSONException;

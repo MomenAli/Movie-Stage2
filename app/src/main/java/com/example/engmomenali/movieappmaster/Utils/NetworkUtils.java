@@ -1,4 +1,4 @@
-package com.example.engmomenali.movieappmaster;
+package com.example.engmomenali.movieappmaster.Utils;
 
 import android.net.Uri;
 import android.util.Log;

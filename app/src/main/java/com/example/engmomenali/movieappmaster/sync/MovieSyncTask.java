@@ -14,10 +14,9 @@ import java.util.Arrays;
 
 import com.example.engmomenali.movieappmaster.Data.MovieContract;
 import com.example.engmomenali.movieappmaster.MianMovieFragment;
-import com.example.engmomenali.movieappmaster.NetworkUtils;
-import com.example.engmomenali.movieappmaster.MovieJsonUtils;
+import com.example.engmomenali.movieappmaster.Utils.NetworkUtils;
+import com.example.engmomenali.movieappmaster.Utils.MovieJsonUtils;
 import com.example.engmomenali.movieappmaster.Data.MovieContract.*;
-import com.example.engmomenali.movieappmaster.Movie;
 
 /**
  * Created by Momen Ali on 11/26/2017.

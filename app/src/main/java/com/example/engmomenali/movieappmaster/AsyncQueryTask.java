@@ -3,6 +3,8 @@ package com.example.engmomenali.movieappmaster;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.example.engmomenali.movieappmaster.Utils.NetworkUtils;
+
 import java.io.IOException;
 import java.net.URL;
 

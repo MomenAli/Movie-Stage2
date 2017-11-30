@@ -94,21 +94,23 @@
             app:layout_constraintTop_toBottomOf="@id/DetailsOverView"
             app:srcCompat="@android:color/darker_gray" />
 
-        <fragment
-            android:id="@+id/fragment2"
-            android:name="com.example.engmomenali.movieappmaster.TrailerFragment"
+        <android.support.v4.view.ViewPager
+            android:id="@+id/trailer_viewpager"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="200dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
 
+            android:minHeight="160dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_trailers_label" />
+
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/IMSeprate"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginEnd="16dp"
@@ -117,8 +119,19 @@
             android:background="@color/colorPrimaryDark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fragment2"
+            app:layout_constraintTop_toBottomOf="@+id/trailer_viewpager"
             app:srcCompat="@android:color/darker_gray" />
+      <!--<android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
 
         <fragment
             android:id="@+id/fragment3"
@@ -130,12 +143,12 @@
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_reviews_label" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/tv_trailers_label"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="19dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:text="@string/trailers_Label"
@@ -144,14 +157,14 @@
             android:layout_marginLeft="16dp" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/tv_reviews_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:text="@string/review_label"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView3"
+            app:layout_constraintTop_toBottomOf="@+id/IMSeprate"
             android:layout_marginLeft="16dp" />
 
         <ImageView

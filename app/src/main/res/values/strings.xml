@@ -13,6 +13,7 @@
     <string name="resolution">720</string>
     <string name="ConError">Can not connect to internet , Check your internet connection</string>
     <string name="author_label">Author</string>
+    <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
     <string name="trailers_Label">Trailers:</string>
     <string name="review_label">Reviews:</string>
 </resources>

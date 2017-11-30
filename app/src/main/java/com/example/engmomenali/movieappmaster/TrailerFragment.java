@@ -1,27 +1,38 @@
 package com.example.engmomenali.movieappmaster;
 
+import android.content.Context;
 import android.support.v4.app.LoaderManager;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import com.example.engmomenali.movieappmaster.Utils.MovieJsonUtils;
+import com.example.engmomenali.movieappmaster.Utils.NetworkUtils;
+import com.example.engmomenali.movieappmaster.Utils.URLParameters;
 
 import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Momen Ali on 11/27/2017.
@@ -29,17 +40,20 @@ import java.util.Arrays;
 
 public class TrailerFragment extends Fragment implements LoaderManager.LoaderCallbacks<String>{
 
-    ListView listView;
+    RecyclerView recyclerView;
     private static final String SEARCH_QUERY_URL_EXTRA = "query";
     private static final int SEARCH_LOADER = 552;
     int Quary_Kind;
     private static final int Quary_fetch_trialers = 437;
     private static final int Quary_fetch_reviews = 800;
-    private TrailerAdapter mTrailerAdapter;
-    Trailer[] trailers = new Trailer[]{new Trailer()};
 
+    Trailer[] trailers = new Trailer[]{new Trailer()};
+    ViewPager vp;
+   /* TextView tv_label;
+    ImageView IMSperate;*/
 
     public TrailerFragment() {
+
     }
 
     @Override
@@ -83,30 +97,92 @@ public class TrailerFragment extends Fragment implements LoaderManager.LoaderCal
         }
     }
     @Override
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fregment_trailer, container, false);
+        recyclerView = (RecyclerView) inflater.inflate(
+                R.layout.fregment_trailer, container, false);
+        setupRecyclerView(recyclerView);
+        vp = (ViewPager) container.findViewById(R.id.trailer_viewpager);
+        /*tv_label = (TextView) container.findViewById(R.id.tv_trailers_label);
+        IMSperate = (ImageView) container.findViewById(R.id.IMSeprate);*/
 
-        mTrailerAdapter = new TrailerAdapter(getActivity(), Arrays.asList(trailers));
+        return recyclerView;
+    }
+    private void setupRecyclerView(RecyclerView recyclerView) {
+        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+        recyclerView.setAdapter(new RecyclerViewAdapter(getActivity(),Arrays.asList(trailers)
+                ));
+    }
+    public static class RecyclerViewAdapter
+            extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-        // Get a reference to the ListView, and attach this adapter to it.
-        listView = (ListView) rootView.findViewById(R.id.listview);
-        listView.setAdapter(mTrailerAdapter);
+        private final TypedValue mTypedValue = new TypedValue();
+        private int mBackground;
+        private List<Trailer> mValues;
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Trailer trailer = mTrailerAdapter.getItem(position);
-                Uri uri = Uri.parse(URLParameters.BASIC_YOUTUBE_URL+trailer.getKey());
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(uri);
+        public static class ViewHolder extends RecyclerView.ViewHolder {
+            public Trailer mTrailer;
 
-                startActivity(intent);
+            public final View mView;
 
+            public final TextView mTVTrailerNmae;
+
+            public final TextView mTVSize;
+
+            public ViewHolder(View view) {
+                super(view);
+                mView = view;
+                mTVTrailerNmae = (TextView) view.findViewById(R.id.tv_trailer_name);
+                mTVSize = (TextView) view.findViewById(R.id.tv_trailer_size);
             }
-        });
 
-        return rootView;
+            @Override
+            public String toString() {
+                return super.toString() + " '" + mTVTrailerNmae.getText();
+            }
+        }
+
+        public RecyclerViewAdapter(Context context, List<Trailer> items) {
+            context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
+            mBackground = mTypedValue.resourceId;
+            mValues = items;
+        }
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.trailer_item, parent, false);
+            view.setBackgroundResource(mBackground);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(final ViewHolder holder, int position) {
+            holder.mTrailer = mValues.get(position);
+            int num = position+1;
+            holder.mTVTrailerNmae.setText("Trailer "+num);
+            holder.mTVSize.setText((CharSequence) holder.mTrailer.getSize());
+
+            holder.mView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Context context = v.getContext();
+                    Uri uri = Uri.parse(URLParameters.BASIC_YOUTUBE_URL+holder.mTrailer.getKey());
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(uri);
+
+                    context.startActivity(intent);
+                }
+            });
+
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return mValues.size();
+        }
     }
 
     @Override
@@ -146,14 +222,7 @@ public class TrailerFragment extends Fragment implements LoaderManager.LoaderCal
 
     @Override
     public void onLoadFinished(Loader<String> loader, String data) {
-//        switch (Quary_Kind){
-//            case Quary_fetch_trialers:
-//
-//                break;
-//            case Quary_fetch_reviews:
-//
-//                break;
-//        }
+
         if (data != null) {
             try {
                 Log.d("SearchResults", "onLoadFinished: "+data);
@@ -164,9 +233,12 @@ public class TrailerFragment extends Fragment implements LoaderManager.LoaderCal
                      ) {
                     Log.d("SearchResults", "onLoadFinished: "+t.toString());
                 }
-                mTrailerAdapter = new TrailerAdapter(getActivity(), Arrays.asList(trailers));
-                listView.setAdapter(mTrailerAdapter);
-                mTrailerAdapter.notifyDataSetChanged();
+
+                ViewGroup.LayoutParams params = vp.getLayoutParams();
+                int high = 93 * trailers.length;
+                params.height = high;
+                vp.setLayoutParams(params);
+                setupRecyclerView(recyclerView);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -177,4 +249,5 @@ public class TrailerFragment extends Fragment implements LoaderManager.LoaderCal
     public void onLoaderReset(Loader<String> loader) {
 
     }
+
 }

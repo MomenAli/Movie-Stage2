@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.engmomenali.movieappmaster.Data.MovieContract.*;
+import com.example.engmomenali.movieappmaster.Utils.URLParameters;
 import com.squareup.picasso.Picasso;
 
 /**

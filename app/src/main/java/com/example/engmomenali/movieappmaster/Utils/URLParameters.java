@@ -1,4 +1,6 @@
-package com.example.engmomenali.movieappmaster;
+package com.example.engmomenali.movieappmaster.Utils;
+
+import com.example.engmomenali.movieappmaster.BuildConfig;
 
 /**
  * Created by MomenAli on 10/15/2017.
