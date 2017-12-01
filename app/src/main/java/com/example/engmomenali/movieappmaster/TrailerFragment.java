@@ -235,7 +235,8 @@ public class TrailerFragment extends Fragment implements LoaderManager.LoaderCal
                 }
 
                 ViewGroup.LayoutParams params = vp.getLayoutParams();
-                int high = 93 * trailers.length;
+                int high = 110;
+                high += 93 * (trailers.length-1);
                 params.height = high;
                 vp.setLayoutParams(params);
                 setupRecyclerView(recyclerView);

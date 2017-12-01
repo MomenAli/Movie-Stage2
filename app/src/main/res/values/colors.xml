@@ -6,4 +6,5 @@
     <color name="colorPrimaryLight">#7986CB</color>
     <color name="colorGood">#4CAF50</color>
     <color name="colorBad">#F44336</color>
+    <color name="Black">#000</color>
 </resources>

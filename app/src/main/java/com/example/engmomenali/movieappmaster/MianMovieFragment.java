@@ -37,9 +37,10 @@ import com.example.engmomenali.movieappmaster.sync.MovieSyncUtils;
  */
 
 public class MianMovieFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
-    private static final String TAG = MianMovieFragment.class.getSimpleName();
+    private static final String TAG = "MianMovieFragment";
     public static int Search_Sort = 2;
-
+    private static final String CallBack_Key = "CallBack_Key";
+    int Query_Sort_id;
     private  MovieAdapter mMovieAdabter;
     AsyncTask mLoadingData;
     String JSONResults;
@@ -49,13 +50,7 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
     //    ProgressBar mLoadingIndicator;
     private ArrayList<Movie> mMovies;
     int i = 0;
-    Movie[] movie = {
-            new Movie(i++,"it","animae","15/2/2014","//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg ",15.0,25.0,"path"),
-            new Movie(i++,"it","animae","15/2/2014","http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg ",15.0,25.0,"path"),
-            new Movie(i++,"it","animae","15/2/2014","http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg ",15.0,25.0,"path"),
-            new Movie(i++,"it","animae","15/2/2014","http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg ",15.0,25.0,"path"),
-            new Movie(i++,"it","animae","15/2/2014","http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg ",15.0,25.0,"path"),
-    };
+
 
     public MianMovieFragment() {
         setRetainInstance(true);
@@ -64,21 +59,38 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null){
+            Query_Sort_id = savedInstanceState.getInt(CallBack_Key);
+        }else Query_Sort_id = -1;
+        Log.d(TAG, "onCreate: "+Query_Sort_id);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(CallBack_Key,Query_Sort_id);
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         Log.d(TAG_life, "onActivityCreated: ");
 
         Log.d(TAG, "onActivityCreated: /////////////////////////////");
-        Cursor c =
+       /* Cursor c =
                 getActivity().getContentResolver().query(MovieEntry.CONTENT_URI,
                         new String[]{MovieEntry._ID},
                         null,
                         null,
                         null);
-
+        
         if (c.getCount() == 0 ){
            // insertData
             insertdata();
-        }
+        }*/
+
 
 //        Cursor temp = c;
 //        temp.moveToPosition(1);
@@ -100,46 +112,69 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
         MovieSyncUtils.startImmediateSync(getActivity());
     }
 String TAG_life = "lifecycle";
-    @Override
-    public void onStart() {
-        Log.d(TAG_life, "onStart: ");
 
-        Cursor c =
-                this.getActivity().getContentResolver().query(MovieEntry.CONTENT_URI,
-                        null,
-                        null,
-                        null,
-                        null);
-        mMovieAdabter.swapCursor(c);
-        PrintCursor(c);
-        super.onStart();
-    }
-    public void PrintCursor(Cursor mCursor){
-        if (mCursor.getCount()==0)return;
-        for(int i = 0 ; i < mCursor.getCount();i++) {
-            mCursor.moveToPosition(i);
-            String ss = MovieContract.MovieEntry._ID + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry._ID)) + " " +
-                    MovieContract.MovieEntry.TITLE + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.TITLE)) + " " +
-                    MovieContract.MovieEntry.POSTERPATH + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.POSTERPATH)) + " " +
-                    MovieContract.MovieEntry.OVERVIEW + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.OVERVIEW)) + " " +
-                    MovieContract.MovieEntry.RATING + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.RATING)) + " " +
-                    MovieContract.MovieEntry.POPULARITY + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.POPULARITY)) + " " +
-                    MovieContract.MovieEntry.COVERIMAGEPATH + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.COVERIMAGEPATH)) + " " +
-                    MovieContract.MovieEntry.RELEASEDATE + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.RELEASEDATE)) + " " +
-                    MovieContract.MovieEntry.Favorit + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.Favorit));
-            Log.d(TAG_life, "Movie: "+ss);
-        }
-    }
 
     @Override
     public void onResume() {
-        Log.d(TAG_life, "onResume: ");
+        Log.d(TAG, "onResume: ");
+        switch (Query_Sort_id){
+            case R.id.favorite:
+
+                String mSortOrder = MovieEntry.RATING + " DESC";
+                String mSelection = MovieEntry.Favorit + "=?";
+                String [] mSelectionArgs = new String[]{"1"};
+                Cursor c =
+                        getActivity().getContentResolver().query(MovieEntry.CONTENT_URI,
+                                null,
+                                mSelection,
+                                mSelectionArgs,
+                                mSortOrder);
+                mMovieAdabter.swapCursor(c);
+                Log.d(TAG, "onResume: favorite");
+                break;
+            case R.id.Most_pop:
+
+                mSortOrder = MovieEntry.POPULARITY + " DESC";
+                c =
+                        getActivity().getContentResolver().query(MovieEntry.CONTENT_URI,
+                                null,
+                                null,
+                                null,
+                                mSortOrder);
+                mMovieAdabter.swapCursor(c);
+                Log.d(TAG, "onResume: Most_pop");
+                break;
+            case R.id.Most_rate:
+
+                mSortOrder = MovieEntry.RATING + " DESC";
+                c =
+                        getActivity().getContentResolver().query(MovieEntry.CONTENT_URI,
+                                null,
+                                null,
+                                null,
+                                mSortOrder);
+                mMovieAdabter.swapCursor(c);
+                Log.d(TAG, "onResume: Most_rate");
+                break;
+
+                default:
+                    c =
+                            getActivity().getContentResolver().query(MovieEntry.CONTENT_URI,
+                                    null,
+                                    null,
+                                    null,
+                                    null);
+                    mMovieAdabter.swapCursor(c);
+                    Log.d(TAG, "onResume: default");
+
+
+        }
         super.onResume();
     }
 
     @Override
     public void onPause() {
-        Log.d(TAG_life, "onPause: ");
+        Log.d(TAG, "onPause: ");
         super.onPause();
     }
 
@@ -148,7 +183,24 @@ String TAG_life = "lifecycle";
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        Query_Sort_id = id;
+        Log.d(TAG, "onOptionsItemSelected: "+Query_Sort_id);
+        if(id == R.id.favorite){
 
+            Search_Sort = 1;
+            MovieSyncUtils.startImmediateSync(getActivity());
+            String mSortOrder = MovieEntry.RATING + " DESC";
+            String mSelection = MovieEntry.Favorit + "=?";
+            String [] mSelectionArgs = new String[]{"1"};
+            Cursor c =
+                    getActivity().getContentResolver().query(MovieEntry.CONTENT_URI,
+                            null,
+                            mSelection,
+                            mSelectionArgs,
+                            mSortOrder);
+            mMovieAdabter.swapCursor(c);
+            return true;
+        }
         if(id == R.id.Most_pop){
 
                 Search_Sort = 1;
@@ -193,14 +245,7 @@ String TAG_life = "lifecycle";
 
           rootView = inflater.inflate(R.layout.fragment_main,container,false);
          mMovieAdabter = new MovieAdapter(getActivity(),null,0,CURSOR_LOADER_ID);
-         MovieSyncUtils.startImmediateSync(getActivity());
-//        TextView tv = (TextView) rootView.findViewById(R.id.massage);
-////        tv.setText("Hello");
-//        try {
-//            fetchMovies(2);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
+
         gridView = (GridView) rootView.findViewById(R.id.gridview);
         gridView.setAdapter(mMovieAdabter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -235,20 +280,11 @@ String TAG_life = "lifecycle";
         return rootView;
     }
 
-    public void fetchMovies(int Sort) throws JSONException {
-        ConnectivityManager cm = (ConnectivityManager)this.getContext().getSystemService(this.getContext().CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-        if (isConnected) {
-            URL SearchUrl = NetworkUtils.buildUrl(Sort);
-            Log.d(TAG, "fetchMovies: " + SearchUrl);
-           // new AsyncQueryTask(this.getContext(), new dataFetchCompleteListner()).execute(SearchUrl);
-        }else
-            Toast.makeText(this.getContext(),R.string.ConError,Toast.LENGTH_LONG).show();
-        }
+
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Log.d(TAG, "onCreateLoader: ");
         return new CursorLoader(getActivity(),
                 MovieEntry.CONTENT_URI,
                 null,
@@ -259,12 +295,13 @@ String TAG_life = "lifecycle";
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        Log.d(TAG, "onLoadFinished: ");
        mMovieAdabter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mMovieAdabter.swapCursor( null);
+        Log.d(TAG, "onLoaderReset: ");mMovieAdabter.swapCursor( null);
     }
 
 

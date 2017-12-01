@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:backgroundTint="@android:color/background_light"
     >
 
@@ -16,10 +16,10 @@
         android:layout_marginTop="16dp"
         android:backgroundTint="@android:color/background_light"
         android:text="@string/author_label"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginLeft="16dp"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"/>
+        android:layout_marginLeft="16dp" />
 
     <TextView
         android:id="@+id/tv_Review_author"
@@ -35,7 +35,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:text="TextView"
+        tools:text="@string/review"
+
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/tv_Review_author"

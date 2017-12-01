@@ -15,5 +15,7 @@
     <string name="author_label">Author</string>
     <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
     <string name="trailers_Label">Trailers:</string>
+    <string name="review">Skarsgård goes to hell and back to craft a truly malevolent creation, utterly believable as the black soul of King’s cursed small town</string>
+    <string name="favorite">Favorite</string>
     <string name="review_label">Reviews:</string>
 </resources>

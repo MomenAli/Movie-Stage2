@@ -6,6 +6,7 @@
         android:orderInCategory="1"
         app:showAsAction="ifRoom">
         <menu>
+            <item android:id="@+id/favorite" android:title="@string/favorite"></item>
             <item android:id="@+id/Most_pop" android:title="@string/popular"></item>
             <item android:id="@+id/Most_rate" android:title="@string/rate"></item>
         </menu>

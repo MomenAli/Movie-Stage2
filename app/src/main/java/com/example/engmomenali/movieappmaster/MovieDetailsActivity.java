@@ -48,6 +48,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
             adapter.addFragment(new TrailerFragment(), "Category 1");
             viewPager.setAdapter(adapter);
         }
+        ViewPager viewPager2 = (ViewPager) findViewById(R.id.review_viewpager);
+        if (viewPager2 != null) {
+            Adapter adapter = new Adapter(getSupportFragmentManager());
+            adapter.addFragment(new ReviewFragment(), "Category 1");
+            viewPager2.setAdapter(adapter);
+        }
             setTitle(extras.getString(MovieContract.MovieEntry.TITLE));
             TVOverView.setText(extras.getString(MovieContract.MovieEntry.OVERVIEW));
             TVUserRating.setText(extras.getString(MovieContract.MovieEntry.RATING));

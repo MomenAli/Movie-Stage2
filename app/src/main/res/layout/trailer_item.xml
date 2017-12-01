@@ -14,7 +14,7 @@
         android:layout_gravity="right"
         android:layout_weight="1"
         app:srcCompat="@android:drawable/ic_media_play"
-        android:tint="@color/colorBad"
+        android:tint="@color/Black"
         />
 
     <TextView
@@ -23,14 +23,19 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="2"
+        android:textColor="@color/colorBad"
         android:gravity="center_vertical"
         android:text="TextView"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Display1"/>
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+        android:textSize="32sp"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:layout_weight="2"
         tools:text="@string/resolution"
+        android:textColor="@color/colorGood"
         android:id="@+id/tv_trailer_size"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Display1"/>
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+        android:textSize="32sp"/>
 </LinearLayout>
