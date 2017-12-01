@@ -5,8 +5,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.example.engmomenali.movieappmaster.Data.MovieContract;
-import com.example.engmomenali.movieappmaster.Review;
-import com.example.engmomenali.movieappmaster.Trailer;
+import com.example.engmomenali.movieappmaster.Reviews.Review;
+import com.example.engmomenali.movieappmaster.Trailers.Trailer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,12 +18,10 @@ import java.net.HttpURLConnection;
  * Created by MomenAli on 10/16/2017.
  */
 
-public class  MovieJsonUtils {
-    
-
-public static String  TAG = "SearchResults";
+public class MovieJsonUtils {
 
 
+    public static String TAG = "SearchResults";
 
 
     public static ContentValues[] getMovies(Context context, String JsonStr) throws JSONException {
@@ -40,18 +38,18 @@ public static String  TAG = "SearchResults";
 
 
         //definre the parameter of the page
-        final String OWM_Results      = "results";
+        final String OWM_Results = "results";
         final String OWM_MESSAGE_CODE = "cod";
 
-        final String OWM_id           = "id";
-        final String OWM_Title        = "original_title";
-        final String OWM_poster_path  = "poster_path";
-        final String OWM_overview     = "overview";
+        final String OWM_id = "id";
+        final String OWM_Title = "original_title";
+        final String OWM_poster_path = "poster_path";
+        final String OWM_overview = "overview";
         final String OWM_vote_average = "vote_average";
         final String OWM_release_date = "release_date";
-        final String OWM_Popularity   = "popularity";
-        final String OWM_CoverPoster  ="backdrop_path";
-        Log.d("TAG", "getMovies: jsonstr ====== > "+JsonStr);
+        final String OWM_Popularity = "popularity";
+        final String OWM_CoverPoster = "backdrop_path";
+        Log.d("TAG", "getMovies: jsonstr ====== > " + JsonStr);
         JSONObject MoviesJson = new JSONObject(JsonStr);
 
                 /* Is there an error? */
@@ -71,10 +69,10 @@ public static String  TAG = "SearchResults";
         }
 
 
-        JSONArray   MovieJsonArray = MoviesJson.getJSONArray(OWM_Results);
+        JSONArray MovieJsonArray = MoviesJson.getJSONArray(OWM_Results);
 
-        ContentValues [] cv = new ContentValues[MovieJsonArray.length()];
-        for(int i = 0; i< MovieJsonArray.length();i++){
+        ContentValues[] cv = new ContentValues[MovieJsonArray.length()];
+        for (int i = 0; i < MovieJsonArray.length(); i++) {
 
 
             cv[i] = new ContentValues();
@@ -94,19 +92,19 @@ public static String  TAG = "SearchResults";
         }
         return cv;
     }
+
     public static Trailer[] getTrailers(Context context, String JsonStr) throws JSONException {
 
 
-
         //definre the parameter of the page
-        final String OWM_Results      = "results";
+        final String OWM_Results = "results";
         final String OWM_MESSAGE_CODE = "cod";
 
-        final String OWM_id    = "id";
-        final String OWM_key   = "key";
-        final String OWM_size  = "size";
+        final String OWM_id = "id";
+        final String OWM_key = "key";
+        final String OWM_size = "size";
 
-        Log.d(TAG, "getMovies: jsonstr ====== > "+JsonStr);
+        Log.d(TAG, "getMovies: jsonstr ====== > " + JsonStr);
         JSONObject trailerJson = new JSONObject(JsonStr);
 
                 /* Is there an error? */
@@ -124,10 +122,10 @@ public static String  TAG = "SearchResults";
                     return null;
             }
         }
-        JSONArray   trailerJsonArray = trailerJson.getJSONArray(OWM_Results);
+        JSONArray trailerJsonArray = trailerJson.getJSONArray(OWM_Results);
 
-        Trailer [] trailers = new Trailer[trailerJsonArray.length()];
-        for(int i = 0; i< trailerJsonArray.length();i++){
+        Trailer[] trailers = new Trailer[trailerJsonArray.length()];
+        for (int i = 0; i < trailerJsonArray.length(); i++) {
 
             trailers[i] = new Trailer();
             JSONObject trailerJSONItem = trailerJsonArray.getJSONObject(i);
@@ -138,19 +136,19 @@ public static String  TAG = "SearchResults";
         }
         return trailers;
     }
+
     public static Review[] getReviews(Context context, String JsonStr) throws JSONException {
 
 
-
         //definre the parameter of the page
-        final String OWM_Results      = "results";
+        final String OWM_Results = "results";
         final String OWM_MESSAGE_CODE = "cod";
 
-        final String OWM_id    = "id";
-        final String OWM_author  = "author";
-        final String OWM_Content  = "content";
-        final String OWM_url  = "url";
-        Log.d(TAG, "getReviews: jsonstr ====== > "+JsonStr);
+        final String OWM_id = "id";
+        final String OWM_author = "author";
+        final String OWM_Content = "content";
+        final String OWM_url = "url";
+        Log.d(TAG, "getReviews: jsonstr ====== > " + JsonStr);
         JSONObject reviewJson = new JSONObject(JsonStr);
 
                 /* Is there an error? */
@@ -168,30 +166,22 @@ public static String  TAG = "SearchResults";
                     return null;
             }
         }
-        JSONArray   reviewJsonArray = reviewJson.getJSONArray(OWM_Results);
+        JSONArray reviewJsonArray = reviewJson.getJSONArray(OWM_Results);
 
         Review[] reviews = new Review[reviewJsonArray.length()];
-        Log.d(TAG, "getReviews: number of "+reviewJsonArray.length());
-        for(int i = 0; i< reviewJsonArray.length();i++){
-            Log.d(TAG, "getReviews: enter the for "+i);
+        for (int i = 0; i < reviewJsonArray.length(); i++) {
             reviews[i] = new Review();
-            Log.d(TAG, "getReviews: after creating");
+
             JSONObject reviewJSONItem = reviewJsonArray.getJSONObject(i);
 
-            Log.d(TAG, "getReviews: after JSONObject");
             reviews[i].setId(reviewJSONItem.getString(OWM_id));
 
-            Log.d(TAG, "getReviews: after OWM_id");
             reviews[i].setContent(reviewJSONItem.getString(OWM_Content));
 
-            Log.d(TAG, "getReviews: after OWM_Content");
             reviews[i].setAuthor(reviewJSONItem.getString(OWM_author));
 
-            Log.d(TAG, "getReviews: after OWM_author");
             reviews[i].setUrl(reviewJSONItem.getString(OWM_url));
 
-            Log.d(TAG, "getReviews: after OWM_url");
-            Log.d(TAG, "getReviews: "+reviews[i].toString());
         }
         return reviews;
     }

@@ -1,18 +1,11 @@
-package com.example.engmomenali.movieappmaster;
+package com.example.engmomenali.movieappmaster.Trailers;
 
 /**
  * Created by Momen Ali on 11/27/2017.
  */
 
 public class Trailer {
-    /*"id":"5963e0ea92514122510dac6c",
-    "iso_639_1":
-    "en","iso_3166_1":
-    "US","key":"Qz8cjvKJLuw",
-    "name":"Official Teaser",
-    "site":"YouTube",
-    "size":1080,
-    "type":"Teaser"*/
+
 
     public Trailer(String id, String key, String size) {
         this.id = id;

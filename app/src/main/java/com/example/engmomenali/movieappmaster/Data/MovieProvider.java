@@ -19,7 +19,6 @@ import com.example.engmomenali.movieappmaster.Movie;
  */
 
 
-
 public class MovieProvider extends ContentProvider {
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
@@ -29,7 +28,7 @@ public class MovieProvider extends ContentProvider {
     private static final int MOVIE_WITH_ID = 388;
 
 
-    private static UriMatcher buildUriMatcher(){
+    private static UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = MovieContract.AUTHORITY;
 
@@ -51,28 +50,29 @@ public class MovieProvider extends ContentProvider {
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
         SQLiteDatabase db = mMovieDBHelper.getReadableDatabase();
         int match = sUriMatcher.match(uri);
-        switch (match){
+        switch (match) {
             case MOVIE:
-                  return db.query(MovieEntry.TABLENAME,
-                          projection,
-                          selection,
-                          selectionArgs,
-                          null,
-                          null,
-                          sortOrder);
+                return db.query(MovieEntry.TABLENAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
 
             case MOVIE_WITH_ID:
-                String mSelection = MovieEntry._ID+ "=?";
+                String mSelection = MovieEntry._ID + "=?";
                 String id = String.valueOf(ContentUris.parseId(uri));
-                String [] mSelectionArgs = new String[]{id};
-                return  db.query(MovieEntry.TABLENAME,
+                String[] mSelectionArgs = new String[]{id};
+                return db.query(MovieEntry.TABLENAME,
                         projection,
                         mSelection,
                         mSelectionArgs,
                         null,
                         null,
                         sortOrder);
-            default:   throw new UnsupportedOperationException("Unknown uri "+ uri);
+            default:
+                throw new UnsupportedOperationException("Unknown uri " + uri);
         }
     }
 
@@ -90,15 +90,16 @@ public class MovieProvider extends ContentProvider {
         int match = sUriMatcher.match(uri);
         switch (match) {
             case MOVIE:
-                long _id = db.insert(MovieEntry.TABLENAME,null,values);
-                if(_id > 0)
+                long _id = db.insert(MovieEntry.TABLENAME, null, values);
+                if (_id > 0)
                     returnUri = MovieEntry.buildMovieUri(_id);
                 else
                     throw new android.database.SQLException("Field to insert into " + uri);
                 break;
-                default:   throw new UnsupportedOperationException("Unknown uri "+ uri);
+            default:
+                throw new UnsupportedOperationException("Unknown uri " + uri);
         }
-        getContext().getContentResolver().notifyChange(uri,null);
+        getContext().getContentResolver().notifyChange(uri, null);
         return returnUri;
     }
 
@@ -151,17 +152,17 @@ public class MovieProvider extends ContentProvider {
                     if (count > 0) {
                         db.setTransactionSuccessful();
                     }
-                }finally {
+                } finally {
 
                     db.endTransaction();
                 }
-                if (count>0){
-                    getContext().getContentResolver().notifyChange(uri,null);
+                if (count > 0) {
+                    getContext().getContentResolver().notifyChange(uri, null);
                 }
-                Log.d("lifecycle", "bulkInsert: "+ count);
+                Log.d("lifecycle", "bulkInsert: " + count);
                 return count;
-                default:
-                    return super.bulkInsert(uri, values);
+            default:
+                return super.bulkInsert(uri, values);
         }
     }
 
@@ -172,8 +173,8 @@ public class MovieProvider extends ContentProvider {
 
         int match = sUriMatcher.match(uri);
 
-        switch(match){
-            case MOVIE:{
+        switch (match) {
+            case MOVIE: {
                 numUpdated = db.update(MovieEntry.TABLENAME,
                         values,
                         selection,
@@ -184,17 +185,17 @@ public class MovieProvider extends ContentProvider {
                 numUpdated = db.update(MovieEntry.TABLENAME,
                         values,
                         MovieEntry._ID + " = ?",
-                        new String[] {String.valueOf(ContentUris.parseId(uri))});
-                Log.d("MovieDetailsActivity", "update: favorite "+String.valueOf(ContentUris.parseId(uri)));
+                        new String[]{String.valueOf(ContentUris.parseId(uri))});
+                Log.d("MovieDetailsActivity", "update: favorite " + String.valueOf(ContentUris.parseId(uri)));
 
                 break;
             }
-            default:{
+            default: {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
             }
         }
 
-        if (numUpdated > 0){
+        if (numUpdated > 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
 

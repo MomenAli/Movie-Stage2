@@ -8,8 +8,7 @@ import android.provider.BaseColumns;
  * Created by Momen Ali on 11/23/2017.
  */
 
-public class MovieContract
-{
+public class MovieContract {
 
     public static final String AUTHORITY = "com.example.engmomenali.movieappmaster";
 
@@ -20,7 +19,7 @@ public class MovieContract
 
         public static final String TABLENAME = "movietable";
 
-        public static final String _ID =  "_id";
+        public static final String _ID = "_id";
         public static final String TITLE = "title";
         public static final String OVERVIEW = "overview";
         public static final String RELEASEDATE = "releaseDate";
@@ -31,9 +30,11 @@ public class MovieContract
         public static final String COVERIMAGEPATH = "coverImagePath";
 
 
-        public static final Uri CONTENT_URI  = BASE_CONTENT_URL.buildUpon().appendPath(TABLENAME).build();
+        public static final Uri CONTENT_URI = BASE_CONTENT_URL.buildUpon().appendPath(TABLENAME).build();
 
-        public static Uri buildMovieUri (long id ){return ContentUris.withAppendedId(CONTENT_URI,id);}
+        public static Uri buildMovieUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
 
     }
 }

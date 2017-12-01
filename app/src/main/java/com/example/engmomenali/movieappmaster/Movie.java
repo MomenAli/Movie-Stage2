@@ -1,7 +1,7 @@
 package com.example.engmomenali.movieappmaster;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+        import android.os.Parcel;
+        import android.os.Parcelable;
 
 /**
  * Created by MomenAli on 10/15/2017.
@@ -43,7 +43,7 @@ public class Movie implements Parcelable {
         this.favorite = favorite;
     }
 
-    private Movie(Parcel in){
+    private Movie(Parcel in) {
         this.id = in.readLong();
         this.title = in.readString();
         this.overview = in.readString();
@@ -63,16 +63,15 @@ public class Movie implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-         dest.writeLong(id);
-         dest.writeString(title);
-         dest.writeString(overview);
-         dest.writeString(releaseDate);
-         dest.writeString(posterPath);
-         dest.writeString(coverImagePath);
-         dest.writeDouble(Ratings);
-         dest.writeDouble(popularity);
+        dest.writeLong(id);
+        dest.writeString(title);
+        dest.writeString(overview);
+        dest.writeString(releaseDate);
+        dest.writeString(posterPath);
+        dest.writeString(coverImagePath);
+        dest.writeDouble(Ratings);
+        dest.writeDouble(popularity);
     }
-
 
 
     public final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
@@ -87,7 +86,6 @@ public class Movie implements Parcelable {
         }
 
     };
-
 
 
     public void setId(long id) {
