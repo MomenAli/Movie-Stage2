@@ -41,7 +41,7 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
     private static final String TAG = "MianMovieFragment";
     public static int Search_Sort = 2;
     private static final String CallBack_Key = "CallBack_Key";
-    int Query_Sort_id;
+    int Query_Sort_id = -1;
     private MovieAdapter mMovieAdabter;
     AsyncTask mLoadingData;
     String JSONResults;
@@ -59,19 +59,11 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
 
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
-        if (savedInstanceState != null) {
-            Query_Sort_id = savedInstanceState.getInt(CallBack_Key);
-        } else Query_Sort_id = -1;
-        Log.d(TAG, "onCreate: " + Query_Sort_id);
-    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+        Log.d(TAG, "onSaveInstanceState: " + Query_Sort_id);
         outState.putInt(CallBack_Key, Query_Sort_id);
     }
 
@@ -232,7 +224,11 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        Log.d(TAG, "fetchMovies: " + "Starting this fucking program");
+        Log.d(TAG, "onCreateView: " + "Starting this program " +Query_Sort_id);
+        if (savedInstanceState != null) {
+            Query_Sort_id = savedInstanceState.getInt(CallBack_Key);
+        }
+        Log.d(TAG, "onCreateView: " + "Starting this  program " +Query_Sort_id);
         Cursor c =
                 getActivity().getContentResolver().query(MovieEntry.CONTENT_URI,
                         null,
