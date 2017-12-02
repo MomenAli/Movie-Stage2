@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -91,6 +92,26 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
 
     public void insertdata() {
         MovieSyncUtils.startImmediateSync(getActivity());
+        final Cursor[] c = {null};
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Do something after 5s = 5000ms
+
+                c[0] = getActivity().getContentResolver().query(MovieEntry.CONTENT_URI,
+                        null,
+                        null,
+                        null,
+                        null);
+                mMovieAdabter.swapCursor(c[0]);
+
+                Log.d(TAG, "postDelayed: while number of items "+ c[0].getCount());
+            }
+        }, 2000);
+
+
+        Log.d(TAG, "insertdata: number of items ");
     }
 
     String TAG_life = "lifecycle";
@@ -212,7 +233,15 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         Log.d(TAG, "fetchMovies: " + "Starting this fucking program");
-
+        Cursor c =
+                getActivity().getContentResolver().query(MovieEntry.CONTENT_URI,
+                        null,
+                        null,
+                        null,
+                        null);
+        Log.d(TAG, "onCreateView: number of return movies "+c.getCount());
+        if (c.getCount()==0)
+            insertdata();
         rootView = inflater.inflate(R.layout.fragment_main, container, false);
         mMovieAdabter = new MovieAdapter(getActivity(), null, 0, CURSOR_LOADER_ID);
 
