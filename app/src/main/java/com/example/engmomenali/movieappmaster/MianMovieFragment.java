@@ -83,10 +83,7 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
     }
 
 
-    public void mySwapCursor(Cursor New ){
-        New.setNotificationUri(getContext().getContentResolver(),MovieEntry.CONTENT_URI);
-        mMovieAdabter.swapCursor(New);
-    }
+
 
     String TAG_life = "lifecycle";
 
@@ -106,7 +103,7 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
                                 mSelection,
                                 mSelectionArgs,
                                 mSortOrder);
-                mySwapCursor(c);
+                mMovieAdabter.swapCursor(c);
                 Log.d(TAG, "onResume: favorite");
                 break;
             case R.id.Most_pop:
@@ -118,7 +115,7 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
                                 null,
                                 null,
                                 mSortOrder);
-                mySwapCursor(c);
+                mMovieAdabter.swapCursor(c);
                 Log.d(TAG, "onResume: Most_pop");
                 break;
             case R.id.Most_rate:
@@ -130,7 +127,7 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
                                 null,
                                 null,
                                 mSortOrder);
-                mySwapCursor(c);
+                mMovieAdabter.swapCursor(c);
                 Log.d(TAG, "onResume: Most_rate");
                 break;
 
@@ -141,7 +138,7 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
                                 null,
                                 null,
                                 null);
-                mySwapCursor(c);
+                mMovieAdabter.swapCursor(c);
                 Log.d(TAG, "onResume: default");
 
 
@@ -169,7 +166,7 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
                             mSelection,
                             mSelectionArgs,
                             mSortOrder);
-            mySwapCursor(c);
+            mMovieAdabter.swapCursor(c);
             return true;
         }
         if (id == R.id.Most_pop) {
@@ -183,7 +180,7 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
                             null,
                             null,
                             mSortOrder);
-            mySwapCursor(c);
+            mMovieAdabter.swapCursor(c);
             return true;
         }
         if (id == R.id.Most_rate) {
@@ -196,7 +193,7 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
                             null,
                             null,
                             mSortOrder);
-            mySwapCursor(c);
+            mMovieAdabter.swapCursor(c);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -272,13 +269,13 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         Log.d(TAG, "onLoadFinished: ");
-        mySwapCursor(data);
+        mMovieAdabter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         Log.d(TAG, "onLoaderReset: ");
-        mySwapCursor(null);
+        mMovieAdabter.swapCursor(null);
     }
 
 
