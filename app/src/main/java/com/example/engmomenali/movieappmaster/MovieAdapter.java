@@ -70,6 +70,8 @@ public class MovieAdapter extends CursorAdapter {
         return view;
     }
 
+
+
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
 

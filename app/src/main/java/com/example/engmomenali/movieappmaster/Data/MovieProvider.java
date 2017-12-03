@@ -1,6 +1,7 @@
 package com.example.engmomenali.movieappmaster.Data;
 
 import android.content.ContentProvider;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
@@ -52,25 +53,30 @@ public class MovieProvider extends ContentProvider {
         int match = sUriMatcher.match(uri);
         switch (match) {
             case MOVIE:
-                return db.query(MovieEntry.TABLENAME,
+                Cursor mCursor = db.query(MovieEntry.TABLENAME,
                         projection,
                         selection,
                         selectionArgs,
                         null,
                         null,
                         sortOrder);
+                mCursor.setNotificationUri(getContext().getContentResolver(),MovieEntry.CONTENT_URI);
+                return mCursor;
 
             case MOVIE_WITH_ID:
                 String mSelection = MovieEntry._ID + "=?";
                 String id = String.valueOf(ContentUris.parseId(uri));
                 String[] mSelectionArgs = new String[]{id};
-                return db.query(MovieEntry.TABLENAME,
+                 mCursor = db.query(MovieEntry.TABLENAME,
                         projection,
                         mSelection,
                         mSelectionArgs,
                         null,
                         null,
                         sortOrder);
+                mCursor.setNotificationUri(getContext().getContentResolver(),MovieEntry.CONTENT_URI);
+                return mCursor;
+
             default:
                 throw new UnsupportedOperationException("Unknown uri " + uri);
         }

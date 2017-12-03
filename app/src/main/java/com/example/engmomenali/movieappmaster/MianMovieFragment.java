@@ -82,28 +82,10 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
 
     }
 
-    public void insertdata() {
-        MovieSyncUtils.startImmediateSync(getActivity());
-        final Cursor[] c = {null};
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // Do something after 5s = 5000ms
 
-                c[0] = getActivity().getContentResolver().query(MovieEntry.CONTENT_URI,
-                        null,
-                        null,
-                        null,
-                        null);
-                mMovieAdabter.swapCursor(c[0]);
-
-                Log.d(TAG, "postDelayed: while number of items "+ c[0].getCount());
-            }
-        }, 2000);
-
-
-        Log.d(TAG, "insertdata: number of items ");
+    public void mySwapCursor(Cursor New ){
+        New.setNotificationUri(getContext().getContentResolver(),MovieEntry.CONTENT_URI);
+        mMovieAdabter.swapCursor(New);
     }
 
     String TAG_life = "lifecycle";
@@ -124,7 +106,7 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
                                 mSelection,
                                 mSelectionArgs,
                                 mSortOrder);
-                mMovieAdabter.swapCursor(c);
+                mySwapCursor(c);
                 Log.d(TAG, "onResume: favorite");
                 break;
             case R.id.Most_pop:
@@ -136,7 +118,7 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
                                 null,
                                 null,
                                 mSortOrder);
-                mMovieAdabter.swapCursor(c);
+                mySwapCursor(c);
                 Log.d(TAG, "onResume: Most_pop");
                 break;
             case R.id.Most_rate:
@@ -148,7 +130,7 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
                                 null,
                                 null,
                                 mSortOrder);
-                mMovieAdabter.swapCursor(c);
+                mySwapCursor(c);
                 Log.d(TAG, "onResume: Most_rate");
                 break;
 
@@ -159,7 +141,7 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
                                 null,
                                 null,
                                 null);
-                mMovieAdabter.swapCursor(c);
+                mySwapCursor(c);
                 Log.d(TAG, "onResume: default");
 
 
@@ -187,7 +169,7 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
                             mSelection,
                             mSelectionArgs,
                             mSortOrder);
-            mMovieAdabter.swapCursor(c);
+            mySwapCursor(c);
             return true;
         }
         if (id == R.id.Most_pop) {
@@ -201,7 +183,7 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
                             null,
                             null,
                             mSortOrder);
-            mMovieAdabter.swapCursor(c);
+            mySwapCursor(c);
             return true;
         }
         if (id == R.id.Most_rate) {
@@ -214,7 +196,7 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
                             null,
                             null,
                             mSortOrder);
-            mMovieAdabter.swapCursor(c);
+            mySwapCursor(c);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -229,6 +211,7 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
             Query_Sort_id = savedInstanceState.getInt(CallBack_Key);
         }
         Log.d(TAG, "onCreateView: " + "Starting this  program " +Query_Sort_id);
+        MovieSyncUtils.startImmediateSync(getActivity());
         Cursor c =
                 getActivity().getContentResolver().query(MovieEntry.CONTENT_URI,
                         null,
@@ -236,8 +219,7 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
                         null,
                         null);
         Log.d(TAG, "onCreateView: number of return movies "+c.getCount());
-        if (c.getCount()==0)
-            insertdata();
+
         rootView = inflater.inflate(R.layout.fragment_main, container, false);
         mMovieAdabter = new MovieAdapter(getActivity(), null, 0, CURSOR_LOADER_ID);
 
@@ -290,13 +272,13 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         Log.d(TAG, "onLoadFinished: ");
-        mMovieAdabter.swapCursor(data);
+        mySwapCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         Log.d(TAG, "onLoaderReset: ");
-        mMovieAdabter.swapCursor(null);
+        mySwapCursor(null);
     }
 
 
