@@ -2,6 +2,7 @@ package com.example.engmomenali.movieappmaster;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -30,7 +31,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
     String TAG = "MovieDetailsActivity";
     public static String TagId;
     public Boolean Favorate = false;
-
+    private static final String top_key = "top_Key";
+    int Top;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,8 +44,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
         TextView TVReleaseDate = (TextView) findViewById(R.id.ReleaseDate);
         ImageView favoriteStar = (ImageView) findViewById(R.id.favorite_star);
 
+        Log.d(TAG, "onCreate: "+ Top);
         Bundle extras = getIntent().getExtras();
-
         ViewPager viewPager = (ViewPager) findViewById(R.id.trailer_viewpager);
         if (viewPager != null) {
             Adapter adapter = new Adapter(getSupportFragmentManager());
@@ -61,7 +63,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
         TVUserRating.setText(extras.getString(MovieContract.MovieEntry.RATING));
         TVReleaseDate.setText(extras.getString(MovieContract.MovieEntry.RELEASEDATE));
         TagId = extras.getString(MovieContract.MovieEntry._ID);
-        Log.d("MovieDetailsActivity", "onItemClick: favorite " + extras.getString(MovieContract.MovieEntry.Favorit));
+       // Log.d("MovieDetailsActivity", "onItemClick: favorite " + extras.getString(MovieContract.MovieEntry.Favorit));
 
         if (extras.getString(MovieContract.MovieEntry.Favorit).equals("0")) {
             Favorate = false;
@@ -76,7 +78,24 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
                 .error(R.drawable.error)
                 .into(IM);
 
+        if (savedInstanceState != null){
+            Log.d(TAG, "onCreate: ");
+            View rootView = findViewById(android.R.id.content);
+            Top = savedInstanceState.getInt(top_key);
+            Log.d(TAG, "onCreate: " + savedInstanceState.getInt(top_key));
+            rootView.setScrollY(savedInstanceState.getInt(top_key));
+        }
 
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        View rootView = findViewById(android.R.id.content);
+        int top = (int) rootView.getY();
+
+        Log.d(TAG, "onSaveInstanceState: "+top);
+
+        outState.putInt(top_key,top);
     }
 
     @Override
@@ -93,6 +112,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
                 Favorate = true;
                 favoriteStar.setImageResource(android.R.drawable.btn_star_big_on);
             }
+            View rootView = findViewById(android.R.id.content);
+            Log.d(TAG, "onResume: " + Top);
+            rootView.setY(Top);
         }
         super.onResume();
     }
@@ -126,7 +148,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
             ContentValues contentValues = new ContentValues();
             contentValues.put(MovieContract.MovieEntry.Favorit, "0");
             getContentResolver().update(MovieContract.MovieEntry.buildMovieUri(Long.parseLong(TagId)), contentValues, null, null);
-            Log.d(TAG, "MakeAsFavorite: " + MovieContract.MovieEntry.buildMovieUri(Long.parseLong(TagId)));
+         //   Log.d(TAG, "MakeAsFavorite: " + MovieContract.MovieEntry.buildMovieUri(Long.parseLong(TagId)));
 
 
         } else {
@@ -135,9 +157,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
             ContentValues contentValues = new ContentValues();
             contentValues.put(MovieContract.MovieEntry.Favorit, "1");
             getContentResolver().update(MovieContract.MovieEntry.buildMovieUri(Long.parseLong(TagId)), contentValues, null, null);
-            Log.d(TAG, "MakeAsFavorite: " + MovieContract.MovieEntry.buildMovieUri(Long.parseLong(TagId)));
+         //   Log.d(TAG, "MakeAsFavorite: " + MovieContract.MovieEntry.buildMovieUri(Long.parseLong(TagId)));
             Cursor mCursor = getContentResolver().query(MovieContract.MovieEntry.buildMovieUri(Long.parseLong(TagId)), null, null, null, null);
-            Log.d(TAG, "MakeAsFavorite: " + PrintCursor(mCursor));
+         //   Log.d(TAG, "MakeAsFavorite: " + PrintCursor(mCursor));
 
         }
     }

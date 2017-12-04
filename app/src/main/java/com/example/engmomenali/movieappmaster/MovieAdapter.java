@@ -38,29 +38,7 @@ public class MovieAdapter extends CursorAdapter {
         }
     }
 
-//    public MovieAdapter( Activity context, List<Movie> objects) {
-//
-//        super(context,0, objects);
-//    }
 
-//    @NonNull
-//    @Override
-//    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-//
-//        Movie mMovie = getItem(position);
-//        mContext = parent.getContext();
-//        //if(convertView == null){
-//            convertView = LayoutInflater.from(getContext()).inflate(R.layout.movie_item, parent,false);
-//            ImageView IM = (ImageView) convertView.findViewById(R.id.IM_PosterImage);
-//            Picasso.with(mContext)
-//            .load(URLParameters.POSTER_URL+URLParameters.PHONE_SIZE+mMovie.getPosterPath())
-//            .placeholder(R.drawable.placeholder)
-//                    .error(R.drawable.error)
-//                    .into(IM);
-//       // }
-//
-//        return convertView;
-//    }
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {

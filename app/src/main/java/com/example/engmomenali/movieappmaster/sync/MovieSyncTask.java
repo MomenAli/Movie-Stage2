@@ -101,6 +101,7 @@ public class MovieSyncTask {
                 cvTemp.put(MovieEntry.RATING,cvUpdate[i].getAsString(MovieEntry.RATING));
                 cvTemp.put(MovieEntry.POPULARITY,cvUpdate[i].getAsString(MovieEntry.POPULARITY));
                 cvTemp.put(MovieEntry.OVERVIEW,cvUpdate[i].getAsString(MovieEntry.OVERVIEW));
+                cvTemp.put(MovieEntry.POSTERPATH,cvUpdate[i].getAsString(MovieEntry.POSTERPATH));
                 contentResolver.update(MovieEntry.buildMovieUri(cvUpdate[i].getAsLong(MovieEntry._ID)),cvTemp,null,null);
             }
             Log.d(TAG_life, "syncMovie: insertedCount  bulkInsert " +insertedCount );
