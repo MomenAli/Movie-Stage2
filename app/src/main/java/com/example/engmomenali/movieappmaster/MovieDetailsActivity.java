@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.engmomenali.movieappmaster.Data.MovieContract;
@@ -26,13 +27,16 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MovieDetailsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MovieDetailsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>  , TrailerFragment.onTrailerLoadingFinishListener , ReviewFragment.onReviewLoadingFinishListener{
 
     String TAG = "MovieDetailsActivity";
     public static String TagId;
     public Boolean Favorate = false;
     private static final String top_key = "top_Key";
     int Top;
+
+    boolean fetchReviewFinished = false;
+    boolean fetchTrailerFinished = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,22 +84,27 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
 
         if (savedInstanceState != null){
             Log.d(TAG, "onCreate: ");
-            View rootView = findViewById(android.R.id.content);
             Top = savedInstanceState.getInt(top_key);
-            Log.d(TAG, "onCreate: " + savedInstanceState.getInt(top_key));
-            rootView.setScrollY(savedInstanceState.getInt(top_key));
+
         }
 
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        View rootView = findViewById(android.R.id.content);
+        /*View rootView = findViewById(android.R.id.content);
         int top = (int) rootView.getY();
 
         Log.d(TAG, "onSaveInstanceState: "+top);
 
         outState.putInt(top_key,top);
+        */
+        ScrollView sv = (ScrollView) findViewById(R.id.SV_Details);
+        int top = sv.getScrollY();
+
+        Log.d(TAG, "onSaveInstanceState: "+top);
+        outState.putInt(top_key,top);
+
     }
 
     @Override
@@ -112,9 +121,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
                 Favorate = true;
                 favoriteStar.setImageResource(android.R.drawable.btn_star_big_on);
             }
-            View rootView = findViewById(android.R.id.content);
+            mCursor.close();
+            ScrollView sv = (ScrollView) findViewById(R.id.SV_Details);
             Log.d(TAG, "onResume: " + Top);
-            rootView.setY(Top);
+            sv.scrollTo(0,Top);
         }
         super.onResume();
     }
@@ -205,6 +215,31 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
         @Override
         public CharSequence getPageTitle(int position) {
             return mFragmentTitles.get(position);
+        }
+    }
+    @Override
+    public void OnTrailerFragmentLoadingFinish() {
+        fetchTrailerFinished = true;
+        Log.d(TAG, "OnTrailerFragmentLoadingFinish: " + fetchReviewFinished + "  " + fetchTrailerFinished);
+        if (fetchTrailerFinished && fetchReviewFinished){
+            ScrollView sv = (ScrollView) findViewById(R.id.SV_Details);
+
+            Log.d(TAG, "OnTrailerFragmentLoadingFinish: " + Top);
+            sv.scrollTo(0,Top);
+        }
+
+    }
+
+    @Override
+    public void OnReviewFragmentLoadingFinish() {
+        fetchReviewFinished = true;
+
+        Log.d(TAG, "OnReviewFragmentLoadingFinish: " + fetchReviewFinished + "  " + fetchTrailerFinished);
+        if (fetchTrailerFinished && fetchReviewFinished){
+            ScrollView sv = (ScrollView) findViewById(R.id.SV_Details);
+
+            Log.d(TAG, "OnReviewFragmentLoadingFinish: " + Top);
+            sv.scrollTo(0,Top);
         }
     }
 }

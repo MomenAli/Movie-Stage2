@@ -5,12 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clipToPadding="false"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:id="@+id/SV_Details">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:id="@+id/constrain_details"
         tools:context="com.example.engmomenali.movieappmaster.MovieDetailsActivity">
 
 
@@ -176,4 +178,4 @@
 
 
     </android.support.constraint.ConstraintLayout>
-</ScrollView>
+    </ScrollView>

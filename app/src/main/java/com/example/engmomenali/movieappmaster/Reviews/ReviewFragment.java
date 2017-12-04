@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.example.engmomenali.movieappmaster.MovieDetailsActivity;
 import com.example.engmomenali.movieappmaster.R;
+import com.example.engmomenali.movieappmaster.Trailers.TrailerFragment;
 import com.example.engmomenali.movieappmaster.Utils.MovieJsonUtils;
 import com.example.engmomenali.movieappmaster.Utils.NetworkUtils;
 import com.example.engmomenali.movieappmaster.Utils.URLParameters;
@@ -44,12 +45,26 @@ public class ReviewFragment extends Fragment implements LoaderManager.LoaderCall
     ListView listView;
     private static final String SEARCH_QUERY_URL_EXTRA = "query";
     private static final int SEARCH_LOADER = 553;
+    public static int ReviewNumber;
     Review[] reviews = new Review[]{new Review()};
     ViewPager vp;
-
+    static onReviewLoadingFinishListener  mCallback;
     public ReviewFragment() {
     }
+    public interface onReviewLoadingFinishListener{
+        void OnReviewFragmentLoadingFinish();
+    }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try{
+            mCallback = (onReviewLoadingFinishListener)context;
+        }catch (ClassCastException e){
+            throw new ClassCastException(context.toString() + " must implement OnReviewFragmentLoadingFinish");
+        }
+
+    }
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         fetchReviews();
@@ -90,12 +105,11 @@ public class ReviewFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     public static class RecyclerViewAdapter
-            extends RecyclerView.Adapter<ReviewFragment.RecyclerViewAdapter.ViewHolder> {
+            extends RecyclerView.Adapter<ReviewFragment.RecyclerViewAdapter.ViewHolder>  {
 
         private final TypedValue mTypedValue = new TypedValue();
         private int mBackground;
         private List<Review> mValues;
-
         public static class ViewHolder extends RecyclerView.ViewHolder {
             public Review mReview;
 
@@ -136,7 +150,7 @@ public class ReviewFragment extends Fragment implements LoaderManager.LoaderCall
         @Override
         public void onBindViewHolder(final ReviewFragment.RecyclerViewAdapter.ViewHolder holder, int position) {
             holder.mReview = mValues.get(position);
-
+            Log.d(TAG, "onBindViewHolder: ");
             holder.mTVAuthorNmae.setText(holder.mReview.getAuthor());
             holder.mTVReview.setText((CharSequence) holder.mReview.getContent());
 
@@ -147,12 +161,16 @@ public class ReviewFragment extends Fragment implements LoaderManager.LoaderCall
                     Uri uri = Uri.parse(holder.mReview.getUrl());
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.setData(uri);
-
-                    context.startActivity(intent);
+                    if (intent.resolveActivity(context.getPackageManager()) != null) {
+                        context.startActivity(intent);
+                    }
                 }
             });
-
-
+            Log.d(TAG, "onBindViewHolder: " + position + " from " + ReviewNumber);
+           if (position == ReviewNumber -1) {
+               onReviewLoadingFinishListener mCallBack = ReviewFragment.mCallback;
+               mCallBack.OnReviewFragmentLoadingFinish();
+           }
         }
 
         @Override
@@ -229,6 +247,7 @@ public class ReviewFragment extends Fragment implements LoaderManager.LoaderCall
             params.height = high;
             vp.setLayoutParams(params);
         }
+        ReviewNumber = reviews.length;
     }
 
     @Override

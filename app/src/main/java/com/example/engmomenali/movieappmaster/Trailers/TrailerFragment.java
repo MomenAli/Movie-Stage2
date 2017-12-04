@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.example.engmomenali.movieappmaster.MovieDetailsActivity;
 import com.example.engmomenali.movieappmaster.R;
+import com.example.engmomenali.movieappmaster.Reviews.ReviewFragment;
 import com.example.engmomenali.movieappmaster.Utils.MovieJsonUtils;
 import com.example.engmomenali.movieappmaster.Utils.NetworkUtils;
 import com.example.engmomenali.movieappmaster.Utils.URLParameters;
@@ -39,17 +40,32 @@ import java.util.List;
 
 public class TrailerFragment extends Fragment implements LoaderManager.LoaderCallbacks<String>{
 
+    static onTrailerLoadingFinishListener mCallback;
     RecyclerView recyclerView;
     private static final String SEARCH_QUERY_URL_EXTRA = "query";
     private static final int SEARCH_LOADER = 552;
     int Quary_Kind;
+    final String TAG = "TrailerFragment";
     private static final int Quary_fetch_trialers = 437;
     private static final int Quary_fetch_reviews = 800;
-
+    public static int TrailerNumber;
     Trailer[] trailers = new Trailer[]{new Trailer()};
     ViewPager vp;
-
     public TrailerFragment() {
+
+    }
+    public interface onTrailerLoadingFinishListener{
+        void OnTrailerFragmentLoadingFinish();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try{
+            mCallback = (onTrailerLoadingFinishListener)context;
+        }catch (ClassCastException e){
+            throw new ClassCastException(context.toString() + " must implement OnTrailerFragmentLoadingFinish");
+        }
 
     }
 
@@ -86,6 +102,7 @@ public class TrailerFragment extends Fragment implements LoaderManager.LoaderCal
 
         return recyclerView;
     }
+
     private void setupRecyclerView(RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setAdapter(new RecyclerViewAdapter(getActivity(),Arrays.asList(trailers)
@@ -97,6 +114,8 @@ public class TrailerFragment extends Fragment implements LoaderManager.LoaderCal
         private final TypedValue mTypedValue = new TypedValue();
         private int mBackground;
         private List<Trailer> mValues;
+        Context mContext;
+        String TAG = "TrailerFragment";
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
             public Trailer mTrailer;
@@ -106,7 +125,8 @@ public class TrailerFragment extends Fragment implements LoaderManager.LoaderCal
             public final TextView mTVTrailerNmae;
 
             public final TextView mTVSize;
-
+            
+            
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
@@ -124,6 +144,7 @@ public class TrailerFragment extends Fragment implements LoaderManager.LoaderCal
             context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
             mBackground = mTypedValue.resourceId;
             mValues = items;
+            mContext = context;
         }
 
         @Override
@@ -131,6 +152,7 @@ public class TrailerFragment extends Fragment implements LoaderManager.LoaderCal
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.trailer_item, parent, false);
             view.setBackgroundResource(mBackground);
+            Log.d(TAG, "onCreateViewHolder: ");
             return new ViewHolder(view);
         }
 
@@ -138,6 +160,7 @@ public class TrailerFragment extends Fragment implements LoaderManager.LoaderCal
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mTrailer = mValues.get(position);
             int num = position+1;
+            Log.d(TAG, "onBindViewHolder: ");
             holder.mTVTrailerNmae.setText("Trailer "+num);
             holder.mTVSize.setText((CharSequence) holder.mTrailer.getSize());
 
@@ -148,11 +171,15 @@ public class TrailerFragment extends Fragment implements LoaderManager.LoaderCal
                     Uri uri = Uri.parse(URLParameters.BASIC_YOUTUBE_URL+holder.mTrailer.getKey());
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.setData(uri);
-
-                    context.startActivity(intent);
+                    if (intent.resolveActivity(mContext.getPackageManager()) != null) {
+                        mContext.startActivity(intent);
+                    }
                 }
             });
-
+            if (position == TrailerNumber -1) {
+                onTrailerLoadingFinishListener mCallBack = TrailerFragment.mCallback;
+                mCallBack.OnTrailerFragmentLoadingFinish();
+            }
 
         }
 
@@ -221,6 +248,9 @@ public class TrailerFragment extends Fragment implements LoaderManager.LoaderCal
                 e.printStackTrace();
             }
         }
+
+        TrailerNumber = trailers.length;
+
     }
 
     @Override

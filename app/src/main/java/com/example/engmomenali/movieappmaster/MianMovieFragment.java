@@ -30,6 +30,8 @@ import java.util.ArrayList;
 
 import com.example.engmomenali.movieappmaster.Data.MovieContract;
 import com.example.engmomenali.movieappmaster.Data.MovieContract.*;
+import com.example.engmomenali.movieappmaster.Reviews.ReviewFragment;
+import com.example.engmomenali.movieappmaster.Trailers.TrailerFragment;
 import com.example.engmomenali.movieappmaster.Utils.NetworkUtils;
 import com.example.engmomenali.movieappmaster.sync.MovieSyncUtils;
 
@@ -47,6 +49,7 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
     String JSONResults;
     View rootView;
     GridView gridView;
+
     private static final int CURSOR_LOADER_ID = 579;
     //    ProgressBar mLoadingIndicator;
     private ArrayList<Movie> mMovies;
@@ -258,12 +261,53 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Log.d(TAG, "onCreateLoader: ");
-        return new CursorLoader(getActivity(),
-                MovieEntry.CONTENT_URI,
-                null,
-                null,
-                null,
-                null);
+        switch (Query_Sort_id) {
+            case R.id.favorite:
+
+                String mSortOrder = MovieEntry.RATING + " DESC";
+                String mSelection = MovieEntry.Favorit + "=?";
+                String[] mSelectionArgs = new String[]{"1"};
+                new CursorLoader(getActivity(),MovieEntry.CONTENT_URI,
+                                null,
+                                mSelection,
+                                mSelectionArgs,
+                                mSortOrder);
+                Log.d(TAG, "onResume: favorite");
+                break;
+            case R.id.Most_pop:
+
+                mSortOrder = MovieEntry.POPULARITY + " DESC";
+                new CursorLoader(getActivity(),MovieEntry.CONTENT_URI,
+                                null,
+                                null,
+                                null,
+                                mSortOrder);
+                Log.d(TAG, "onResume: Most_pop");
+                break;
+            case R.id.Most_rate:
+
+                mSortOrder = MovieEntry.RATING + " DESC";
+
+                        new CursorLoader(getActivity(),MovieEntry.CONTENT_URI,
+                                null,
+                                null,
+                                null,
+                                mSortOrder);
+                Log.d(TAG, "onResume: Most_rate");
+                break;
+
+            default:
+
+                new CursorLoader(getActivity(),MovieEntry.CONTENT_URI,
+                                null,
+                                null,
+                                null,
+                                null);
+                Log.d(TAG, "onResume: default");
+
+
+        }
+        return null;
     }
 
     @Override
@@ -277,6 +321,7 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
         Log.d(TAG, "onLoaderReset: ");
         mMovieAdabter.swapCursor(null);
     }
+
 
 
 }

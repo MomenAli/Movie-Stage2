@@ -4,7 +4,7 @@ package com.example.engmomenali.movieappmaster.Trailers;
  * Created by Momen Ali on 11/27/2017.
  */
 
-public class Trailer {
+public class Trailer  {
 
 
     public Trailer(String id, String key, String size) {
