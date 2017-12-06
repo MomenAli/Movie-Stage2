@@ -52,6 +52,7 @@ public class MovieSyncTask {
             int insertedCount= 0 ;
             int updatedCount= 0 ;
 
+            // check if the movie aleardy exist
             for (ContentValues cv:contentValues
                  ) {
                 Log.d(TAG_life, "syncMovie: cv id " + cv.getAsString(MovieEntry._ID));
@@ -66,6 +67,7 @@ public class MovieSyncTask {
                         break;
                     }
                 }
+                // if the movie not exixt but it in the inserted list
                 if (update_index[j] != j){
                     insert_index[j] = j;
                     insertedCount++;
@@ -81,6 +83,8 @@ public class MovieSyncTask {
             ContentValues[] cvUpdate = new ContentValues[updatedCount];
             insertedCount = 0;
             updatedCount  = 0;
+
+            //splite the inserted movie and the update movie
             for (ContentValues cv:contentValues
                     ) {
 
@@ -96,6 +100,7 @@ public class MovieSyncTask {
                 }
                 j++;
             }
+            // update the movie
             ContentValues cvTemp = new ContentValues();
             for (int i = 0; i < updatedCount;i++){
                 cvTemp.put(MovieEntry.RATING,cvUpdate[i].getAsString(MovieEntry.RATING));
@@ -106,6 +111,7 @@ public class MovieSyncTask {
             }
             Log.d(TAG_life, "syncMovie: insertedCount  bulkInsert " +insertedCount );
 
+            // insert the new movie
             if (cvInsert.length>0)
             contentResolver.bulkInsert(MovieEntry.CONTENT_URI, cvInsert);
 

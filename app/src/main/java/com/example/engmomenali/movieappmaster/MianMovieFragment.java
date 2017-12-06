@@ -158,7 +158,7 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
         Log.d(TAG, "onOptionsItemSelected: " + Query_Sort_id);
         if (id == R.id.favorite) {
 
-            Search_Sort = 1;
+            Search_Sort = 2;         // fetching the movies from the server
             MovieSyncUtils.startImmediateSync(getActivity());
             String mSortOrder = MovieEntry.RATING + " DESC";
             String mSelection = MovieEntry.Favorit + "=?";
@@ -174,7 +174,7 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
         }
         if (id == R.id.Most_pop) {
 
-            Search_Sort = 1;
+            Search_Sort = 1;                   // fetching the movies from the server
             MovieSyncUtils.startImmediateSync(getActivity());
             String mSortOrder = MovieEntry.POPULARITY + " DESC";
             Cursor c =
@@ -187,7 +187,7 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
             return true;
         }
         if (id == R.id.Most_rate) {
-            Search_Sort = 1;
+            Search_Sort = 0;                    // fetching the movies from the server
             MovieSyncUtils.startImmediateSync(getActivity());
             String mSortOrder = MovieEntry.RATING + " DESC";
             Cursor c =
