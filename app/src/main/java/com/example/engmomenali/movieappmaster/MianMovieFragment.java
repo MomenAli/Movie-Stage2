@@ -101,13 +101,14 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        //Log.d(TAG, "onSaveInstanceState: " + querySortID);
+        Log.d(TAG, "onSaveInstanceState: " + querySortID);
         /*Saving the Sorting type id */
         outState.putInt(CALLBACK_SORTING_KEY, querySortID);
         /* get the gridView Position */
         int top = gridView.getFirstVisiblePosition();
         /* Save the Position in the bundle */
         outState.putInt(CALLBACK_SCROLL_KEY, top);
+        super.onSaveInstanceState(outState);
 
     }
 
@@ -123,8 +124,14 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void onResume() {
-
+        Log.d(TAG, "onResume: ");
         super.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.d(TAG, "onDestroy: ");
+        super.onDestroy();
     }
 
     /* handle the selection of the menu */
@@ -164,14 +171,26 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onPause() {
+        Log.d(TAG, "onPause: ");
+        super.onPause();
+    }
 
+    
+    @Override
+    public void onStop() {
+        Log.d(TAG, "onStop: ");
+        super.onStop();
+    }
 
+    
     /* the first function called in the Fragment so we will initialize our
-         * Movie Adapter and GridView  */
+                 * Movie Adapter and GridView  */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        //Log.d(TAG, "onCreateView: ");
+        Log.d(TAG, "onCreateView: " +querySortID);
         /* inflate our main Fragment */
         rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -179,7 +198,7 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
         if (savedInstanceState != null) {
             querySortID = savedInstanceState.getInt(CALLBACK_SORTING_KEY);
             top = savedInstanceState.getInt(CALLBACK_SCROLL_KEY);
-            //Log.d(TAG, "onCreateView: " + querySortID);
+            Log.d(TAG, "onCreateView: after restoring data" + querySortID);
         }
 
         /* setup our GridView */
@@ -208,6 +227,7 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
                 extras.putString(MovieEntry.COVERIMAGEPATH, MovieClick.getCoverImagePath());
                 extras.putString(MovieEntry.RELEASEDATE, MovieClick.getReleaseDate());
                 intent.putExtras(extras);
+                Log.d(TAG, "onItemClick: Start new Activity");
                 startActivity(intent);
 
                 mMovieAdabter.notifyDataSetChanged();
