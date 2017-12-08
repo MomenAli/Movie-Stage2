@@ -28,9 +28,7 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 MovieEntry.RATING + " REAL NOT NULL ," +
                 MovieEntry.OVERVIEW + " TEXT NOT NULL," +
                 MovieEntry.COVERIMAGEPATH + " TEXT NOT NULL," +
-                MovieEntry.POSTERPATH + " TEXT NOT NULL," +
-                MovieEntry.Favorit + " INTEGER DEFAULT 0 " +
-                ");";
+                MovieEntry.POSTERPATH + " TEXT NOT NULL );";
         db.execSQL(Query_Create_Table);
     }
 

@@ -10,10 +10,12 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.example.engmomenali.movieappmaster.Data.MovieContract;
 import com.example.engmomenali.movieappmaster.MianMovieFragment;
+import com.example.engmomenali.movieappmaster.Movie;
 import com.example.engmomenali.movieappmaster.Utils.NetworkUtils;
 import com.example.engmomenali.movieappmaster.Utils.MovieJsonUtils;
 import com.example.engmomenali.movieappmaster.Data.MovieContract.*;
@@ -27,13 +29,25 @@ public class MovieSyncTask {
     private static String  TAG_life = "lifecycle";
     synchronized public static void syncMovie(Context context) {
         Log.d("TAG", "syncMovie: i did quary *************************************");
-        URL url = NetworkUtils.buildUrl(MianMovieFragment.Search_Sort);
+        URL url = NetworkUtils.buildUrl(2);
 
         try {
             String jsonResult = NetworkUtils.getResponseFromHttpUrl(url);
 
-            ContentValues[] contentValues = MovieJsonUtils.getMovies(context,jsonResult);
+            ArrayList<Movie> Movies = MovieJsonUtils.getMovies(context,jsonResult);
 
+            ContentValues[] contentValues = new ContentValues[Movies.size()];
+            for(int i = 0 ; i < Movies.size(); i++){
+                Movie movie = Movies.get(i);
+                contentValues[i].put(MovieEntry.POSTERPATH,movie.getPosterPath());
+                contentValues[i].put(MovieEntry._ID,movie.getId());
+                contentValues[i].put(MovieEntry.OVERVIEW,movie.getoverview());
+                contentValues[i].put(MovieEntry.RATING,movie.getRatings());
+                contentValues[i].put(MovieEntry.POPULARITY,movie.getPopularity());
+                contentValues[i].put(MovieEntry.TITLE,movie.getTitle());
+                contentValues[i].put(MovieEntry.RELEASEDATE,movie.getReleaseDate());
+                contentValues[i].put(MovieEntry.COVERIMAGEPATH,movie.getCoverImagePath());
+            }
             if (contentValues == null || contentValues.length == 0)return;
             int [] insert_index = new int[contentValues.length];
             Arrays.fill(insert_index, -1);
@@ -124,12 +138,25 @@ public class MovieSyncTask {
     }
     synchronized public static void InsertMovies(Context context) {
         Log.d("TAG", "syncMovie: i did quary *************************************");
-        URL url = NetworkUtils.buildUrl(MianMovieFragment.Search_Sort);
+        URL url = NetworkUtils.buildUrl(2);
 
         try {
             String jsonResult = NetworkUtils.getResponseFromHttpUrl(url);
 
-            ContentValues[] contentValues = MovieJsonUtils.getMovies(context,jsonResult);
+            ArrayList<Movie> Movies = MovieJsonUtils.getMovies(context,jsonResult);
+
+            ContentValues[] contentValues = new ContentValues[Movies.size()];
+            for(int i = 0 ; i < Movies.size(); i++){
+                Movie movie = Movies.get(i);
+                contentValues[i].put(MovieEntry.POSTERPATH,movie.getPosterPath());
+                contentValues[i].put(MovieEntry._ID,movie.getId());
+                contentValues[i].put(MovieEntry.OVERVIEW,movie.getoverview());
+                contentValues[i].put(MovieEntry.RATING,movie.getRatings());
+                contentValues[i].put(MovieEntry.POPULARITY,movie.getPopularity());
+                contentValues[i].put(MovieEntry.TITLE,movie.getTitle());
+                contentValues[i].put(MovieEntry.RELEASEDATE,movie.getReleaseDate());
+                contentValues[i].put(MovieEntry.COVERIMAGEPATH,movie.getCoverImagePath());
+            }
 
             if (contentValues == null || contentValues.length == 0)return;
 
@@ -157,8 +184,7 @@ public class MovieSyncTask {
                     MovieContract.MovieEntry.RATING + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.RATING)) + " " +
                     MovieContract.MovieEntry.POPULARITY + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.POPULARITY)) + " " +
                     MovieContract.MovieEntry.COVERIMAGEPATH + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.COVERIMAGEPATH)) + " " +
-                    MovieContract.MovieEntry.RELEASEDATE + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.RELEASEDATE)) + " " +
-                    MovieContract.MovieEntry.Favorit + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.Favorit));
+                    MovieContract.MovieEntry.RELEASEDATE + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.RELEASEDATE));
             Log.d(TAG_life, "Movie: "+ss);
         }
     }

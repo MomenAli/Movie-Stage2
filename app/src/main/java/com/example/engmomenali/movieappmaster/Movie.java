@@ -16,7 +16,6 @@ public class Movie implements Parcelable {
     private Double Ratings;
     private Double popularity;
     private String coverImagePath;
-    private boolean favorite;
 
 
     public Movie(long id, String title, String overview, String releaseDate, String posterPath, Double ratings, Double popularity, String coverImagePath) {
@@ -35,12 +34,19 @@ public class Movie implements Parcelable {
 
     }
 
-    public boolean isFavorite() {
-        return favorite;
-    }
-
-    public void setFavorite(boolean favorite) {
-        this.favorite = favorite;
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", overview='" + overview + '\'' +
+                ", releaseDate='" + releaseDate + '\'' +
+                ", posterPath='" + posterPath + '\'' +
+                ", Ratings=" + Ratings +
+                ", popularity=" + popularity +
+                ", coverImagePath='" + coverImagePath + '\'' +
+                ", CREATOR=" + CREATOR +
+                '}';
     }
 
     private Movie(Parcel in) {

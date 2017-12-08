@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.example.engmomenali.movieappmaster.Data.MovieContract;
+import com.example.engmomenali.movieappmaster.Movie;
 import com.example.engmomenali.movieappmaster.Reviews.Review;
 import com.example.engmomenali.movieappmaster.Trailers.Trailer;
 
@@ -13,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
 
 /**
  * Created by MomenAli on 10/16/2017.
@@ -24,8 +26,8 @@ public class MovieJsonUtils {
     public static String TAG = "SearchResults";
 
 
-    public static ContentValues[] getMovies(Context context, String JsonStr) throws JSONException {
-        //ArrayList<Movie> mMovieList = new ArrayList<Movie>();
+    public static ArrayList getMovies(Context context, String JsonStr) throws JSONException {
+        ArrayList<Movie> mMovieList = new ArrayList<Movie>();
         /*
         *   I Need this information for this stage (Stage 1)
         *   original title
@@ -71,26 +73,25 @@ public class MovieJsonUtils {
 
         JSONArray MovieJsonArray = MoviesJson.getJSONArray(OWM_Results);
 
-        ContentValues[] cv = new ContentValues[MovieJsonArray.length()];
         for (int i = 0; i < MovieJsonArray.length(); i++) {
 
 
-            cv[i] = new ContentValues();
+            Movie MovieTemp = new Movie();
 
             JSONObject MovieJSONItem = MovieJsonArray.getJSONObject(i);
 
-            cv[i].put(MovieContract.MovieEntry._ID, MovieJSONItem.getLong(OWM_id));
-            cv[i].put(MovieContract.MovieEntry.TITLE, MovieJSONItem.getString(OWM_Title));
-            cv[i].put(MovieContract.MovieEntry.POSTERPATH, MovieJSONItem.getString(OWM_poster_path));
-            cv[i].put(MovieContract.MovieEntry.RATING, MovieJSONItem.getDouble(OWM_vote_average));
-            cv[i].put(MovieContract.MovieEntry.RELEASEDATE, MovieJSONItem.getString(OWM_release_date));
-            cv[i].put(MovieContract.MovieEntry.OVERVIEW, MovieJSONItem.getString(OWM_overview));
-            cv[i].put(MovieContract.MovieEntry.POPULARITY, MovieJSONItem.getDouble(OWM_Popularity));
-            cv[i].put(MovieContract.MovieEntry.COVERIMAGEPATH, MovieJSONItem.getString(OWM_CoverPoster));
-
+            MovieTemp.setId(MovieJSONItem.getLong(OWM_id));
+            MovieTemp.setTitle(MovieJSONItem.getString(OWM_Title));
+            MovieTemp.setPosterPath(MovieJSONItem.getString(OWM_poster_path));
+            MovieTemp.setRatings(MovieJSONItem.getDouble(OWM_vote_average));
+            MovieTemp.setReleaseDate(MovieJSONItem.getString(OWM_release_date));
+            MovieTemp.setoverview(MovieJSONItem.getString(OWM_overview));
+            MovieTemp.setPopularity(MovieJSONItem.getDouble(OWM_Popularity));
+            MovieTemp.setCoverImagePath(MovieJSONItem.getString(OWM_CoverPoster));
+            mMovieList.add(MovieTemp);
 
         }
-        return cv;
+        return mMovieList;
     }
 
     public static Trailer[] getTrailers(Context context, String JsonStr) throws JSONException {

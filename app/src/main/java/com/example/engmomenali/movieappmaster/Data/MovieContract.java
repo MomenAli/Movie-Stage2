@@ -26,7 +26,6 @@ public class MovieContract {
         public static final String POSTERPATH = "posterPath";
         public static final String RATING = "Rating";
         public static final String POPULARITY = "popularity";
-        public static final String Favorit = "Favorit";
         public static final String COVERIMAGEPATH = "coverImagePath";
 
 

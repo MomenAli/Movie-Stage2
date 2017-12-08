@@ -2,7 +2,6 @@ package com.example.engmomenali.movieappmaster;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -29,19 +28,44 @@ import java.util.List;
 
 public class MovieDetailsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>  , TrailerFragment.onTrailerLoadingFinishListener , ReviewFragment.onReviewLoadingFinishListener{
 
+    /* the debugging TAG*/
     String TAG = "MovieDetailsActivity";
-    public static String TagId;
-    public Boolean Favorate = false;
+
+    /* const key used in the bundle of onSaveInstance*/
     private static final String top_key = "top_Key";
+
+
+    /*  variable hold the id of the current movie*/
+    public static String TagId;
+
+    /* boolean value represent if the current movie is checked as favorite or not*/
+    public Boolean favorite = false;
+
+    /* Movie Object hold the Current Movie*/
+    Movie movie;
+
+    /* variable hole the value of the distance between the current scrollView Position and the the Top*/
     int Top;
 
+    /* loader id const*/
+    private static final int _LOADER_ID = 930;
+
+
+    /* boolean variables represent if the fetching of reviews and trailers has finished or not*/
     boolean fetchReviewFinished = false;
     boolean fetchTrailerFinished = false;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        /* set the resource of the activity*/
         setContentView(R.layout.activity_movie_details);
+
+        /* setup the home action button in the ActionBar*/
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        /* get the resources of the Views of the activity*/
         ImageView IM = (ImageView) findViewById(R.id.DetailsIV);
         TextView TVOverView = (TextView) findViewById(R.id.DetailsOverView);
         TextView TVUserRating = (TextView) findViewById(R.id.UserRating);
@@ -49,6 +73,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
         ImageView favoriteStar = (ImageView) findViewById(R.id.favorite_star);
 
         Log.d(TAG, "onCreate: "+ Top);
+
+        /* */
         Bundle extras = getIntent().getExtras();
         ViewPager viewPager = (ViewPager) findViewById(R.id.trailer_viewpager);
         if (viewPager != null) {
@@ -62,21 +88,33 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
             adapter.addFragment(new ReviewFragment(), "Category 1");
             viewPager2.setAdapter(adapter);
         }
+        movie = new Movie();
         setTitle(extras.getString(MovieContract.MovieEntry.TITLE));
+        movie.setTitle(extras.getString(MovieContract.MovieEntry.TITLE));
         TVOverView.setText(extras.getString(MovieContract.MovieEntry.OVERVIEW));
+        movie.setoverview(extras.getString(MovieContract.MovieEntry.OVERVIEW));
         TVUserRating.setText(extras.getString(MovieContract.MovieEntry.RATING));
+        movie.setRatings(extras.getDouble(MovieContract.MovieEntry.RATING));
         TVReleaseDate.setText(extras.getString(MovieContract.MovieEntry.RELEASEDATE));
+        movie.setReleaseDate(extras.getString(MovieContract.MovieEntry.RELEASEDATE));
+        movie.setId(Long.parseLong(extras.getString(MovieContract.MovieEntry._ID)));
         TagId = extras.getString(MovieContract.MovieEntry._ID);
+        movie.setPosterPath(extras.getString(MovieContract.MovieEntry.POSTERPATH));
+        movie.setCoverImagePath(extras.getString(MovieContract.MovieEntry.COVERIMAGEPATH));
+        movie.setPopularity(extras.getDouble(MovieContract.MovieEntry.POPULARITY));
+        Log.d(TAG, "onCreate: " + movie.toString());
+        Log.d(TAG, "onCreate: "+TagId);
        // Log.d("MovieDetailsActivity", "onItemClick: favorite " + extras.getString(MovieContract.MovieEntry.Favorit));
 
-        if (extras.getString(MovieContract.MovieEntry.Favorit).equals("0")) {
+ /*       if (extras.getString(MovieContract.MovieEntry.Favorit).equals("0")) {
             Favorate = false;
             favoriteStar.setImageResource(android.R.drawable.btn_star_big_off);
         } else {
             Favorate = true;
             favoriteStar.setImageResource(android.R.drawable.btn_star_big_on);
         }
-        Picasso.with(this)
+
+ */       Picasso.with(this)
                 .load(URLParameters.POSTER_URL + URLParameters.PHONE_SIZE + extras.getString(MovieContract.MovieEntry.POSTERPATH))
                 .placeholder(R.drawable.placeholder)
                 .error(R.drawable.error)
@@ -86,8 +124,15 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
             Log.d(TAG, "onCreate: ");
             Top = savedInstanceState.getInt(top_key);
 
-        }
+        }else Top = 0;
 
+        LoaderManager loaderManager = getSupportLoaderManager();
+        Loader<String> githubSearchLoader = loaderManager.getLoader(_LOADER_ID);
+        if (githubSearchLoader == null) {
+            loaderManager.initLoader(_LOADER_ID, null, this);
+        } else {
+            loaderManager.restartLoader(_LOADER_ID, null, this);
+        }
     }
 
     @Override
@@ -112,37 +157,50 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
 
         ImageView favoriteStar = (ImageView) findViewById(R.id.favorite_star);
         Cursor mCursor = getContentResolver().query(MovieContract.MovieEntry.buildMovieUri(Long.parseLong(TagId)), null, null, null, null);
-        if (mCursor.getCount() > 0) {
-            mCursor.moveToPosition(0);
-            if (mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.Favorit)).equals("0")) {
-                Favorate = false;
+        if (mCursor.getCount() == 0) {
+                favorite = false;
                 favoriteStar.setImageResource(android.R.drawable.btn_star_big_off);
             } else {
-                Favorate = true;
+                favorite = true;
                 favoriteStar.setImageResource(android.R.drawable.btn_star_big_on);
             }
-            mCursor.close();
             ScrollView sv = (ScrollView) findViewById(R.id.SV_Details);
             Log.d(TAG, "onResume: " + Top);
             sv.scrollTo(0,Top);
-        }
+
         super.onResume();
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Log.d(TAG, "onCreateLoader: ");
         return new AsyncTaskLoader<Cursor>(this) {
+            @Override
+            protected void onStartLoading() {
+                forceLoad();
+            }
+
             @Override
             public Cursor loadInBackground() {
 
-                return null;
+                Cursor c = getContentResolver().query(MovieContract.MovieEntry.buildMovieUri(Long.parseLong(TagId)),null,null,null,null);
+
+                return c;
             }
         };
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
+        Log.d(TAG, "onLoadFinished: " + data.getCount());
+           ImageView IM = (ImageView) findViewById(R.id.favorite_star);
+           if (data != null && data.getCount() != 0){
+               IM.setImageResource(android.R.drawable.btn_star_big_on);
+               favorite = true;
+           }else{
+               IM.setImageResource(android.R.drawable.btn_star_big_off);
+               favorite = false;
+           }
     }
 
     @Override
@@ -152,25 +210,29 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
 
     public void MakeAsFavorite(View view) {
         ImageView IM = (ImageView) findViewById(R.id.favorite_star);
-        if (Favorate) {
-            Favorate = false;
+        if (favorite) {
+            favorite = false;
             IM.setImageResource(android.R.drawable.btn_star_big_off);
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(MovieContract.MovieEntry.Favorit, "0");
-            getContentResolver().update(MovieContract.MovieEntry.buildMovieUri(Long.parseLong(TagId)), contentValues, null, null);
-         //   Log.d(TAG, "MakeAsFavorite: " + MovieContract.MovieEntry.buildMovieUri(Long.parseLong(TagId)));
+            getContentResolver().delete(MovieContract.MovieEntry.buildMovieUri(Long.parseLong(TagId)), null, null);
+            Log.d(TAG, "MakeAsFavorite: delete " + MovieContract.MovieEntry.buildMovieUri(Long.parseLong(TagId)));
 
 
         } else {
-            IM.setImageResource(android.R.drawable.btn_star_big_on);
-            Favorate = true;
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(MovieContract.MovieEntry.Favorit, "1");
-            getContentResolver().update(MovieContract.MovieEntry.buildMovieUri(Long.parseLong(TagId)), contentValues, null, null);
-         //   Log.d(TAG, "MakeAsFavorite: " + MovieContract.MovieEntry.buildMovieUri(Long.parseLong(TagId)));
-            Cursor mCursor = getContentResolver().query(MovieContract.MovieEntry.buildMovieUri(Long.parseLong(TagId)), null, null, null, null);
-         //   Log.d(TAG, "MakeAsFavorite: " + PrintCursor(mCursor));
 
+            IM.setImageResource(android.R.drawable.btn_star_big_on);
+            favorite = true;
+            ContentValues contentValues = new ContentValues();
+            Log.d(TAG, "MakeAsFavorite: " + movie.toString());
+                contentValues.put(MovieContract.MovieEntry.POSTERPATH,movie.getPosterPath());
+                contentValues.put(MovieContract.MovieEntry._ID,movie.getId());
+                contentValues.put(MovieContract.MovieEntry.OVERVIEW,movie.getoverview());
+                contentValues.put(MovieContract.MovieEntry.RATING,movie.getRatings());
+                contentValues.put(MovieContract.MovieEntry.POPULARITY,movie.getPopularity());
+                contentValues.put(MovieContract.MovieEntry.TITLE,movie.getTitle());
+                contentValues.put(MovieContract.MovieEntry.RELEASEDATE,movie.getReleaseDate());
+                contentValues.put(MovieContract.MovieEntry.COVERIMAGEPATH,movie.getCoverImagePath());
+
+            getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, contentValues);
         }
     }
 
@@ -184,8 +246,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements LoaderMan
                 MovieContract.MovieEntry.RATING + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.RATING)) + " " +
                 MovieContract.MovieEntry.POPULARITY + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.POPULARITY)) + " " +
                 MovieContract.MovieEntry.COVERIMAGEPATH + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.COVERIMAGEPATH)) + " " +
-                MovieContract.MovieEntry.RELEASEDATE + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.RELEASEDATE)) + " " +
-                MovieContract.MovieEntry.Favorit + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.Favorit));
+                MovieContract.MovieEntry.RELEASEDATE + " " + mCursor.getString(mCursor.getColumnIndex(MovieContract.MovieEntry.RELEASEDATE));
         return ss;
     }
 
