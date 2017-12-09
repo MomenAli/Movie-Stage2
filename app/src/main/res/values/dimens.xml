@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_medium">12dp</dimen>
+    <dimen name="margin_large">16dp</dimen>
+    <dimen name="margin_extra_large">32dp</dimen>
+    <dimen name="main_image_width">250dp</dimen>
+    <dimen name="main_image_height">350dp</dimen>
+
+    <dimen name="text_sz_small">8sp</dimen>
+    <dimen name="text_sz_medium">12sp</dimen>
+    <dimen name="text_sz_large">18sp</dimen>
+    <dimen name="text_sz_extra_large">36sp</dimen>
+    
+    <dimen name="extendable">0dp</dimen>
+    <dimen name="small_square_image">80dp</dimen>
+
+    <dimen name="trailer_height">80dp</dimen>
+
+</resources>

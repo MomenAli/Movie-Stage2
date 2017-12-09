@@ -1,4 +1,4 @@
-package com.example.engmomenali.movieappmaster.Reviews;
+package com.example.engmomenali.movieappmaster.reviews;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -18,15 +17,13 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.engmomenali.movieappmaster.MovieDetailsActivity;
 import com.example.engmomenali.movieappmaster.R;
-import com.example.engmomenali.movieappmaster.Trailers.TrailerFragment;
-import com.example.engmomenali.movieappmaster.Utils.MovieJsonUtils;
-import com.example.engmomenali.movieappmaster.Utils.NetworkUtils;
-import com.example.engmomenali.movieappmaster.Utils.URLParameters;
+import com.example.engmomenali.movieappmaster.utils.MovieJsonUtils;
+import com.example.engmomenali.movieappmaster.utils.NetworkUtils;
+import com.example.engmomenali.movieappmaster.utils.URLParameters;
 
 import org.json.JSONException;
 
@@ -40,21 +37,42 @@ import java.util.List;
  */
 
 public class ReviewFragment extends Fragment implements LoaderManager.LoaderCallbacks<String> {
+
+    /* const TAG used for debugging purposes */
     public static String TAG = "ReviewFragment";
-    RecyclerView recyclerView;
-    ListView listView;
+
+    /*const key using in the bundle which passed to the loader*/
     private static final String SEARCH_QUERY_URL_EXTRA = "query";
     private static final int SEARCH_LOADER = 553;
+
+
+    /* object of the recycle view holds our recycleView */
+    RecyclerView recyclerView;
+
+    /* variable used to hold the number of reviews we fetch*/
     public static int ReviewNumber;
+
+    /* array of reviews have an empty review avoiding null exception */
     Review[] reviews = new Review[]{new Review()};
-    ViewPager vp;
+
+    /* instance of the interface to invoke the method after finishing our job here
+    *  made as static so i can use it in the recycleView inner class */
     static onReviewLoadingFinishListener  mCallback;
+
+    /* constructor*/
     public ReviewFragment() {
     }
+
+    /* interface we will implement in the details activity so we can
+     * communicate with the details class and say we finish our job here
+     * after finishing my job here i can use scrollTo function. */
+
     public interface onReviewLoadingFinishListener{
         void OnReviewFragmentLoadingFinish();
     }
 
+    /* this function make sure that when class implement the interface
+    *  it will implement the function too. */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -65,19 +83,28 @@ public class ReviewFragment extends Fragment implements LoaderManager.LoaderCall
         }
 
     }
+
+
+    /* when create the activity fetch the review from the server */
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         fetchReviews();
         super.onActivityCreated(savedInstanceState);
     }
 
+
+    /* this function made to fetch the reviews from the server*/
     public void fetchReviews() {
 
+        /* build our url using URLParameters class and inserting the id of
+         the movie in the url */
         String SearchUrl =
-                NetworkUtils.buildUrl(URLParameters.MOVIE_DB_SITE_URL + "/" + MovieDetailsActivity.TagId + URLParameters.Fetch_reviews);
+                NetworkUtils.buildUrl(URLParameters.MOVIE_DB_SITE_URL + "/" + MovieDetailsActivity.tagId + URLParameters.FETCH_REVIEWS);
+        /* create a bundle to hold the information and  send with the loader */
         Bundle queryBundle = new Bundle();
         queryBundle.putString(SEARCH_QUERY_URL_EXTRA, SearchUrl);
         Log.d(TAG, "fetchReviews: " + SearchUrl);
+        /* create instance of the loaderManger to initialize the loader. */
         LoaderManager loaderManager = this.getLoaderManager();
         Loader<String> SearchLoader = loaderManager.getLoader(SEARCH_LOADER);
         if (SearchLoader == null) {
@@ -90,20 +117,24 @@ public class ReviewFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        /* inflate the recycle view with our xml file */
         recyclerView = (RecyclerView) inflater.inflate(
                 R.layout.fragment_review, container, false);
+
+        /* setup out recycle view */
         setupRecyclerView(recyclerView);
-        vp = (ViewPager) container.findViewById(R.id.review_viewpager);
 
         return recyclerView;
     }
 
+    /* this function made to setup the recycle by setting it's layout and the adapter */
     private void setupRecyclerView(RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setAdapter(new RecyclerViewAdapter(getActivity(), Arrays.asList(reviews)
         ));
     }
 
+    /* this class taken from the example you give me */
     public static class RecyclerViewAdapter
             extends RecyclerView.Adapter<ReviewFragment.RecyclerViewAdapter.ViewHolder>  {
 
@@ -166,7 +197,9 @@ public class ReviewFragment extends Fragment implements LoaderManager.LoaderCall
                     }
                 }
             });
-            Log.d(TAG, "onBindViewHolder: " + position + " from " + ReviewNumber);
+
+            /* if we finish the reviews invoke the function in the class
+            *  which implement our interface. */
            if (position == ReviewNumber -1) {
                onReviewLoadingFinishListener mCallBack = ReviewFragment.mCallback;
                mCallBack.OnReviewFragmentLoadingFinish();
@@ -197,8 +230,7 @@ public class ReviewFragment extends Fragment implements LoaderManager.LoaderCall
                     return null;
                 }
 
-                // COMPLETED (12) Copy the try / catch block from the AsyncTask's doInBackground method
-                /* Parse the URL from the passed in String and perform the search */
+                /* return the JSON response of the http request */
                 try {
                     URL Url = new URL(Quary_Url);
                     String SearchResults = NetworkUtils.getResponseFromHttpUrl(Url);
@@ -220,38 +252,24 @@ public class ReviewFragment extends Fragment implements LoaderManager.LoaderCall
         if (data != null) {
             try {
                 Log.d(TAG, "onLoadFinished: " + data);
+
+                /* parsng the reviews using the function getReviews
+                in the class MovieJsonUtils */
                 reviews = MovieJsonUtils.getReviews(getContext(), data);
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            ViewGroup.LayoutParams params = vp.getLayoutParams();
-            int high = 0;
-            int lines = 0;
-            int ch = 0;
-            setupRecyclerView(recyclerView);
-            // calculate the height of the viewpager
-            for (Review r : reviews
-                    ) {
-                String[] ss = r.getContent().split("/n");
-                for (String s : ss
-                        ) {
-                    int i = s.length() / 50;
-                    i++;
-                    lines += i;
-                    high += i * 25;
-                }
-                high += 80;
-            }
 
-            params.height = high;
-            vp.setLayoutParams(params);
+            setupRecyclerView(recyclerView);
+
         }
+        /* save the fetching reviews number */
         ReviewNumber = reviews.length;
     }
 
     @Override
     public void onLoaderReset(Loader<String> loader) {
-
+        loader = null;
     }
 }

@@ -5,8 +5,8 @@
     android:layout_height="match_parent"
 
     android:numColumns="4"
-    android:verticalSpacing="0dp"
-    android:horizontalSpacing="0dp"
+    android:verticalSpacing="@dimen/extendable"
+    android:horizontalSpacing="@dimen/extendable"
     android:stretchMode="columnWidth"
 
     tools:context=".MianMovieFragment"

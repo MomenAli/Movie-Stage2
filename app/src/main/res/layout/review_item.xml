@@ -9,37 +9,37 @@
     >
 
     <TextView
-        android:id="@+id/tv_trailers_label"
+        android:id="@+id/tvTrailersLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="@dimen/margin_large"
+        android:layout_marginTop="@dimen/margin_large"
         android:backgroundTint="@android:color/background_light"
         android:text="@string/author_label"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginLeft="16dp" />
+        android:layout_marginLeft="@dimen/margin_large" />
 
     <TextView
         android:id="@+id/tv_Review_author"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Display1"
-        app:layout_constraintStart_toStartOf="@+id/tv_trailers_label"
-        app:layout_constraintTop_toBottomOf="@+id/tv_trailers_label"
+        app:layout_constraintStart_toStartOf="@+id/tvTrailersLabel"
+        app:layout_constraintTop_toBottomOf="@+id/tvTrailersLabel"
         tools:text="Screen-Space" />
 
     <TextView
         android:id="@+id/tv_review_body"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/extendable"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="@dimen/margin_small"
         tools:text="@string/review"
 
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/tv_Review_author"
         app:layout_constraintTop_toBottomOf="@+id/tv_Review_author"
-        android:layout_marginRight="8dp" />
+        android:layout_marginRight="@dimen/margin_small" />
 </android.support.constraint.ConstraintLayout>

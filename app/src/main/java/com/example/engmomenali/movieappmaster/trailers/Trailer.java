@@ -1,4 +1,4 @@
-package com.example.engmomenali.movieappmaster.Trailers;
+package com.example.engmomenali.movieappmaster.trailers;
 
 /**
  * Created by Momen Ali on 11/27/2017.
@@ -13,9 +13,12 @@ public class Trailer  {
         this.size = size;
     }
 
-    public static final int Id_Tag = 50;
+    /* holds the id of the trailer*/
     String id;
+    /* holds the key of the trailer which used in fetching the trailer
+     * from youtube  */
     String key;
+    /* represent the resolution of the movie*/
     String size;
 
 

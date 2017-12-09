@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="70dp">
+    android:layout_height="@dimen/trailer_height">
 
 
     <ImageView
@@ -27,7 +27,7 @@
         android:gravity="center_vertical"
         android:text="TextView"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-        android:textSize="32sp"/>
+        android:textSize="@dimen/text_sz_extra_large"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,5 +37,5 @@
         android:textColor="@color/colorGood"
         android:id="@+id/tv_trailer_size"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-        android:textSize="32sp"/>
+        android:textSize="@dimen/text_sz_extra_large" />
 </LinearLayout>

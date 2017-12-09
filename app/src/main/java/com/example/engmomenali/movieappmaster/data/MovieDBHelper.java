@@ -1,10 +1,10 @@
-package com.example.engmomenali.movieappmaster.Data;
+package com.example.engmomenali.movieappmaster.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.engmomenali.movieappmaster.Data.MovieContract.*;
+import com.example.engmomenali.movieappmaster.data.MovieContract.*;
 
 /**
  * Created by Momen Ali on 11/23/2017.

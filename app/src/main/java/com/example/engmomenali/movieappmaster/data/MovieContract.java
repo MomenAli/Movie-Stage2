@@ -1,4 +1,4 @@
-package com.example.engmomenali.movieappmaster.Data;
+package com.example.engmomenali.movieappmaster.data;
 
 import android.content.ContentUris;
 import android.net.Uri;
@@ -17,6 +17,7 @@ public class MovieContract {
 
     public static final class MovieEntry implements BaseColumns {
 
+        /* favorite movie table name */
         public static final String TABLENAME = "movietable";
 
         public static final String _ID = "_id";
@@ -31,6 +32,7 @@ public class MovieContract {
 
         public static final Uri CONTENT_URI = BASE_CONTENT_URL.buildUpon().appendPath(TABLENAME).build();
 
+        /* function to insert the id to the content Uri and return uri */
         public static Uri buildMovieUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }

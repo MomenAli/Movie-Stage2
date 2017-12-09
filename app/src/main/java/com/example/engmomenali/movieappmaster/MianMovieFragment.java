@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -27,10 +26,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
-import com.example.engmomenali.movieappmaster.Data.MovieContract.*;
-import com.example.engmomenali.movieappmaster.Utils.MovieJsonUtils;
-import com.example.engmomenali.movieappmaster.Utils.NetworkUtils;
-import com.example.engmomenali.movieappmaster.sync.MovieSyncUtils;
+import com.example.engmomenali.movieappmaster.data.MovieContract.*;
+import com.example.engmomenali.movieappmaster.utils.MovieJsonUtils;
+import com.example.engmomenali.movieappmaster.utils.NetworkUtils;
 
 
 /**
@@ -106,6 +104,8 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
         outState.putInt(CALLBACK_SORTING_KEY, querySortID);
         /* get the gridView Position */
         int top = gridView.getFirstVisiblePosition();
+        /* add the number of columns of the gridView*/
+        top += gridView.getNumColumns();
         /* Save the Position in the bundle */
         outState.putInt(CALLBACK_SCROLL_KEY, top);
         super.onSaveInstanceState(outState);
@@ -125,6 +125,8 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void onResume() {
         Log.d(TAG, "onResume: ");
+        /* retrieve my position */
+        gridView.smoothScrollToPosition(top);
         super.onResume();
     }
 
@@ -174,6 +176,10 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void onPause() {
         Log.d(TAG, "onPause: ");
+
+        /* save my postion */
+        top = gridView.getFirstVisiblePosition();
+        top += gridView.getNumColumns();
         super.onPause();
     }
 
@@ -347,6 +353,10 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
     public void onLoadFinished(Loader<String> loader, String result) {
 
         /* check if the result is Connection Field*/
+        if (result == null) {
+            Toast.makeText(this.getContext(), R.string.ConError, Toast.LENGTH_LONG).show();
+            return;
+        }
         if (result.equals(CONNECTION_FAILED)) {
             Toast.makeText(this.getContext(), R.string.ConError, Toast.LENGTH_LONG).show();
             return;
@@ -362,7 +372,7 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
 
 
         /*check if the server return movies */
-        if (result != null && !result.equals("")) {
+        if (!result.equals("")) {
             /* get the Movies from the JSON response */
             try {
                 String JSONResults = result;
@@ -380,7 +390,9 @@ public class MianMovieFragment extends Fragment implements LoaderManager.LoaderC
             mMovieAdabter.notifyDataSetChanged();
 
             /*Scroll the GridView to the last Visualized item if there is any saveInatanceState*/
+            Log.d(TAG, "onLoadFinished: "+top);
             gridView.smoothScrollToPosition(top);
+
             top = 0;
 
         } else {

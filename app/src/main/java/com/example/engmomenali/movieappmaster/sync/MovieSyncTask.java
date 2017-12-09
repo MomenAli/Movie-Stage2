@@ -13,12 +13,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import com.example.engmomenali.movieappmaster.Data.MovieContract;
-import com.example.engmomenali.movieappmaster.MianMovieFragment;
+import com.example.engmomenali.movieappmaster.data.MovieContract;
 import com.example.engmomenali.movieappmaster.Movie;
-import com.example.engmomenali.movieappmaster.Utils.NetworkUtils;
-import com.example.engmomenali.movieappmaster.Utils.MovieJsonUtils;
-import com.example.engmomenali.movieappmaster.Data.MovieContract.*;
+import com.example.engmomenali.movieappmaster.utils.NetworkUtils;
+import com.example.engmomenali.movieappmaster.utils.MovieJsonUtils;
+import com.example.engmomenali.movieappmaster.data.MovieContract.*;
 
 /**
  * Created by Momen Ali on 11/26/2017.

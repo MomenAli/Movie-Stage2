@@ -1,4 +1,4 @@
-package com.example.engmomenali.movieappmaster.Utils;
+package com.example.engmomenali.movieappmaster.utils;
 
 import android.net.Uri;
 import android.util.Log;
@@ -19,29 +19,25 @@ public class NetworkUtils {
     final static String BASE_URL =
             URLParameters.MOVIE_DB_SITE_URL;
 
-    final static String primary_release_year = "primary_release_year";
-    final static String year = "2010";
 
-    final static String PARAM_SORT = "sort_by";
+    final static String POP_PARAM = "/popular";
+    final static String VOTE_PARAM = "/top_rated";
 
-    final static String pop_PARAM = "/popular";
-    final static String Vote_PARAM = "/top_rated";
-
-    final static String api_key = "api_key";
-    final static String key = URLParameters.API_KEY;
+    final static String API_KEY = "api_key";
+    final static String KEY = URLParameters.API_KEY;
 
     public static URL buildUrl(int sort) {
         String temp;
         switch(sort){
-            case 1:  temp = pop_PARAM;
+            case 1:  temp = POP_PARAM;
                 break;
-            case 0: temp = Vote_PARAM;
+            case 0: temp = VOTE_PARAM;
                 break;
             default:  temp = "/now_playing";
         }
 
         Uri builtUri = Uri.parse(BASE_URL+temp).buildUpon()
-                .appendQueryParameter(api_key, key)
+                .appendQueryParameter(API_KEY, KEY)
                 .build();
 
         URL url = null;
@@ -56,7 +52,7 @@ public class NetworkUtils {
     public static String buildUrl(String BaseUrl) {
 
         Uri builtUri = Uri.parse(BaseUrl).buildUpon()
-                .appendQueryParameter(api_key, key)
+                .appendQueryParameter(API_KEY, KEY)
                 .build();
         Log.d("buildUrl", "buildUrl: "+builtUri.toString());
         return builtUri.toString();

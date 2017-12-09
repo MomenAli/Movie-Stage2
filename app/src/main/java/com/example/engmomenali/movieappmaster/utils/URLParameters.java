@@ -1,4 +1,4 @@
-package com.example.engmomenali.movieappmaster.Utils;
+package com.example.engmomenali.movieappmaster.utils;
 
 import com.example.engmomenali.movieappmaster.BuildConfig;
 
@@ -12,8 +12,8 @@ public class URLParameters {
     public static final String POSTER_URL = "http://image.tmdb.org/t/p";
     public static final String PHONE_SIZE = "/w185/";
     public static final String BASIC_YOUTUBE_URL = "https://www.youtube.com/watch?v=";
-    public static final String Fetch_trailers = "/videos";
-    public static final String Fetch_reviews = "/reviews";
+    public static final String FETCH_TRAILERS = "/videos";
+    public static final String FETCH_REVIEWS = "/reviews";
 
 
 }

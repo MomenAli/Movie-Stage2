@@ -1,13 +1,11 @@
-package com.example.engmomenali.movieappmaster.Utils;
+package com.example.engmomenali.movieappmaster.utils;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.engmomenali.movieappmaster.Data.MovieContract;
 import com.example.engmomenali.movieappmaster.Movie;
-import com.example.engmomenali.movieappmaster.Reviews.Review;
-import com.example.engmomenali.movieappmaster.Trailers.Trailer;
+import com.example.engmomenali.movieappmaster.reviews.Review;
+import com.example.engmomenali.movieappmaster.trailers.Trailer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,23 +38,23 @@ public class MovieJsonUtils {
 
 
         //definre the parameter of the page
-        final String OWM_Results = "results";
+        final String OWM_RESULTS = "results";
         final String OWM_MESSAGE_CODE = "cod";
 
-        final String OWM_id = "id";
-        final String OWM_Title = "original_title";
-        final String OWM_poster_path = "poster_path";
-        final String OWM_overview = "overview";
-        final String OWM_vote_average = "vote_average";
-        final String OWM_release_date = "release_date";
-        final String OWM_Popularity = "popularity";
-        final String OWM_CoverPoster = "backdrop_path";
+        final String OWM_ID = "id";
+        final String OWM_TITLE = "original_title";
+        final String OWM_POSTER_PATH = "poster_path";
+        final String OWM_OVERVIEW = "overview";
+        final String OWM_VOTE_AVERAGE = "vote_average";
+        final String OWM_RELEASE_DATE = "release_date";
+        final String OWM_POPULARITY = "popularity";
+        final String OWM_COVER_POSTER = "backdrop_path";
         Log.d("TAG", "getMovies: jsonstr ====== > " + JsonStr);
-        JSONObject MoviesJson = new JSONObject(JsonStr);
+        JSONObject moviesJson = new JSONObject(JsonStr);
 
                 /* Is there an error? */
-        if (MoviesJson.has(OWM_MESSAGE_CODE)) {
-            int errorCode = MoviesJson.getInt(OWM_MESSAGE_CODE);
+        if (moviesJson.has(OWM_MESSAGE_CODE)) {
+            int errorCode = moviesJson.getInt(OWM_MESSAGE_CODE);
 
             switch (errorCode) {
                 case HttpURLConnection.HTTP_OK:
@@ -71,7 +69,7 @@ public class MovieJsonUtils {
         }
 
 
-        JSONArray MovieJsonArray = MoviesJson.getJSONArray(OWM_Results);
+        JSONArray MovieJsonArray = moviesJson.getJSONArray(OWM_RESULTS);
 
         for (int i = 0; i < MovieJsonArray.length(); i++) {
 
@@ -80,14 +78,14 @@ public class MovieJsonUtils {
 
             JSONObject MovieJSONItem = MovieJsonArray.getJSONObject(i);
 
-            MovieTemp.setId(MovieJSONItem.getLong(OWM_id));
-            MovieTemp.setTitle(MovieJSONItem.getString(OWM_Title));
-            MovieTemp.setPosterPath(MovieJSONItem.getString(OWM_poster_path));
-            MovieTemp.setRatings(MovieJSONItem.getDouble(OWM_vote_average));
-            MovieTemp.setReleaseDate(MovieJSONItem.getString(OWM_release_date));
-            MovieTemp.setoverview(MovieJSONItem.getString(OWM_overview));
-            MovieTemp.setPopularity(MovieJSONItem.getDouble(OWM_Popularity));
-            MovieTemp.setCoverImagePath(MovieJSONItem.getString(OWM_CoverPoster));
+            MovieTemp.setId(MovieJSONItem.getLong(OWM_ID));
+            MovieTemp.setTitle(MovieJSONItem.getString(OWM_TITLE));
+            MovieTemp.setPosterPath(MovieJSONItem.getString(OWM_POSTER_PATH));
+            MovieTemp.setRatings(MovieJSONItem.getDouble(OWM_VOTE_AVERAGE));
+            MovieTemp.setReleaseDate(MovieJSONItem.getString(OWM_RELEASE_DATE));
+            MovieTemp.setoverview(MovieJSONItem.getString(OWM_OVERVIEW));
+            MovieTemp.setPopularity(MovieJSONItem.getDouble(OWM_POPULARITY));
+            MovieTemp.setCoverImagePath(MovieJSONItem.getString(OWM_COVER_POSTER));
             mMovieList.add(MovieTemp);
 
         }
@@ -98,12 +96,12 @@ public class MovieJsonUtils {
 
 
         //definre the parameter of the page
-        final String OWM_Results = "results";
+        final String OWM_RESULTS = "results";
         final String OWM_MESSAGE_CODE = "cod";
 
-        final String OWM_id = "id";
-        final String OWM_key = "key";
-        final String OWM_size = "size";
+        final String OWM_ID = "id";
+        final String OWM_KEY = "key";
+        final String OWM_SIZE = "size";
 
         Log.d(TAG, "getMovies: jsonstr ====== > " + JsonStr);
         JSONObject trailerJson = new JSONObject(JsonStr);
@@ -123,16 +121,16 @@ public class MovieJsonUtils {
                     return null;
             }
         }
-        JSONArray trailerJsonArray = trailerJson.getJSONArray(OWM_Results);
+        JSONArray trailerJsonArray = trailerJson.getJSONArray(OWM_RESULTS);
 
         Trailer[] trailers = new Trailer[trailerJsonArray.length()];
         for (int i = 0; i < trailerJsonArray.length(); i++) {
 
             trailers[i] = new Trailer();
             JSONObject trailerJSONItem = trailerJsonArray.getJSONObject(i);
-            trailers[i].setId(trailerJSONItem.getString(OWM_id));
-            trailers[i].setKey(trailerJSONItem.getString(OWM_key));
-            trailers[i].setSize(trailerJSONItem.getString(OWM_size));
+            trailers[i].setId(trailerJSONItem.getString(OWM_ID));
+            trailers[i].setKey(trailerJSONItem.getString(OWM_KEY));
+            trailers[i].setSize(trailerJSONItem.getString(OWM_SIZE));
 
         }
         return trailers;
@@ -142,13 +140,13 @@ public class MovieJsonUtils {
 
 
         //definre the parameter of the page
-        final String OWM_Results = "results";
+        final String OWM_RESULTS = "results";
         final String OWM_MESSAGE_CODE = "cod";
 
-        final String OWM_id = "id";
-        final String OWM_author = "author";
-        final String OWM_Content = "content";
-        final String OWM_url = "url";
+        final String OWM_ID = "id";
+        final String OWM_AUTHOR = "author";
+        final String OWM_CONTENT = "content";
+        final String OWM_URL = "url";
         Log.d(TAG, "getReviews: jsonstr ====== > " + JsonStr);
         JSONObject reviewJson = new JSONObject(JsonStr);
 
@@ -167,7 +165,7 @@ public class MovieJsonUtils {
                     return null;
             }
         }
-        JSONArray reviewJsonArray = reviewJson.getJSONArray(OWM_Results);
+        JSONArray reviewJsonArray = reviewJson.getJSONArray(OWM_RESULTS);
 
         Review[] reviews = new Review[reviewJsonArray.length()];
         for (int i = 0; i < reviewJsonArray.length(); i++) {
@@ -175,13 +173,13 @@ public class MovieJsonUtils {
 
             JSONObject reviewJSONItem = reviewJsonArray.getJSONObject(i);
 
-            reviews[i].setId(reviewJSONItem.getString(OWM_id));
+            reviews[i].setId(reviewJSONItem.getString(OWM_ID));
 
-            reviews[i].setContent(reviewJSONItem.getString(OWM_Content));
+            reviews[i].setContent(reviewJSONItem.getString(OWM_CONTENT));
 
-            reviews[i].setAuthor(reviewJSONItem.getString(OWM_author));
+            reviews[i].setAuthor(reviewJSONItem.getString(OWM_AUTHOR));
 
-            reviews[i].setUrl(reviewJSONItem.getString(OWM_url));
+            reviews[i].setUrl(reviewJSONItem.getString(OWM_URL));
 
         }
         return reviews;

@@ -1,7 +1,6 @@
-package com.example.engmomenali.movieappmaster.Data;
+package com.example.engmomenali.movieappmaster.data;
 
 import android.content.ContentProvider;
-import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
@@ -12,8 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.example.engmomenali.movieappmaster.Data.MovieContract.*;
-import com.example.engmomenali.movieappmaster.Movie;
+import com.example.engmomenali.movieappmaster.data.MovieContract.*;
 
 /**
  * Created by Momen Ali on 11/23/2017.

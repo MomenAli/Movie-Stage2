@@ -1,13 +1,17 @@
-package com.example.engmomenali.movieappmaster.Reviews;
+package com.example.engmomenali.movieappmaster.reviews;
 
 /**
  * Created by Momen Ali on 11/28/2017.
  */
 
 public class Review {
+    /* holds the id of the review */
     String id;
+    /* holds the author name of the review */
     String author;
+    /* holds the content of the review */
     String content;
+    /* holds the url which can open the review in the site*/
     String Url;
 
     public Review() {
