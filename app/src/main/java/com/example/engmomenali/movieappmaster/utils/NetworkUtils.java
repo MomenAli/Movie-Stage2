@@ -14,7 +14,7 @@ import java.util.Scanner;
  * Created by MomenAli on 10/15/2017.
  */
 
-public class NetworkUtils {
+public class    NetworkUtils {
 
     final static String BASE_URL =
             URLParameters.MOVIE_DB_SITE_URL;
