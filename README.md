@@ -5,7 +5,7 @@ Please ensure you have a valid API KEY to use this app
 you need to add the API_KEY="api_key" in gradle.properties
 
 
-the final view of the app 
+the final preview of the app 
 
 
 MainActivity
