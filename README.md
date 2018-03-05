@@ -1,5 +1,5 @@
 # Movie_App
-this application is is my first app in udacity nanodegree
+this application is my first app in Udacity Nanodegree
 you need an acount in themoviedb.org 
 Please ensure you have a valid API KEY to use this app
 you need to add the API_KEY="api_key" in gradle.properties
